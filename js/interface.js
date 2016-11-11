@@ -44,10 +44,10 @@ let App = {
 		App.container.innerHTML = data.map((itm) => `
 			<div class="item">
 				<a href="${itm.url}">
-					<div class="vis"><div class="img"><img src="${itm.urlToImage || ''}" /></div></div>
+					<div class="vis"><div class="img"><img src="${itm.urlToImage || 'images/no_photo.png'}" /></div></div>
 					<h2>${itm.title}</h2>
 					<div class="pubdate">${App.dateToStr(itm.publishedAt)}</div>
-					<p>${itm.description}</p>
+					<p>${itm.description || ''}</p>
 				</a>
 			</div>`).join('');
 	},
