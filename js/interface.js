@@ -1,65 +1,77 @@
-const apikey = 'd3a3b4d86b5d48dd98a34ed0bcebfa07';
+let App = {
+	apikey: 'd3a3b4d86b5d48dd98a34ed0bcebfa07',
+	sources: [
+		'bbc-news', 'bloomberg', 'cnn', 'google-news', 'hacker-news', 'mtv-news',
+		'national-geographic', 'polygon', 'reddit-r-all', 'reuters', 'techradar', 'the-guardian-uk',
+		'the-new-york-times', 'the-telegraph', 'the-washington-post', 'time', 'usa-today'
+	],
+	container: document.querySelector('.view'),
 
-let sources = [
-	'bbc-news', 'bloomberg', 'cnn', 'google-news', 'hacker-news', 'mtv-news',
-	'national-geographic', 'polygon', 'reddit-r-all', 'reuters', 'techradar', 'the-guardian-uk',
-	'the-new-york-times', 'the-telegraph', 'the-washington-post', 'time', 'usa-today'
-];
-let wrapper = document.querySelector('.view')
+	init() {
 
+		document.querySelector('.nav').innerHTML = App.sources.map((itm) => `<a href="#${itm}">${itm}</a>`).join('');
 
-document.querySelector('.nav').innerHTML = sources.map((itm) => `<a href="#${itm}">${itm}</a>`).join('');
+		window.addEventListener('hashchange', App.update, true);
 
-window.addEventListener('hashchange', function(){
-	update();
-}, true);
+		App.update();
 
-update();
+	},
 
+	update() {
 
+		let source = App.getSource() || 'google-news';
+		document.querySelector('.header h1').dataset.source = source;
+		App.container.innerHTML = 'Loading data... Please wait.';
 
+		fetch('https://newsapi.org/v1/articles?category=technology&source='+source+'&apiKey='+App.apikey).then(function(response) {
+			return response.json();
+		}).then(function(response) {
+			console.log(response);
+			App.render(response.articles);
+		});
 
-function update(){
-	let source = getSource() || 'google-news';
-	document.querySelector('.header h1').dataset.source = source;
-	wrapper.innerHTML = 'Loading data... Please wait.';
+	},
 
-	fetch('https://newsapi.org/v1/articles?category=technology&source='+source+'&apiKey='+apikey).then(function(response) {
-		return response.json();
-	}).then(function(response) {
-		console.log(response);
-		toView(response);
-	});
-}
+	getSource() {
+		if(window.location.hash){
+			let hash = window.location.hash.substring(1);
+			return App.sources.indexOf(hash) !== -1 ? hash : null;
+		}
+		return null;
+	},
 
-function getSource(){
-	if(window.location.hash){
-		let hash = window.location.hash.substring(1);
-		return sources.indexOf(hash) !== -1 ? hash : null;
+	render(data) {
+		App.container.innerHTML = data.map((itm) => `
+			<div class="item">
+				<a href="${itm.url}">
+					<div class="vis"><div class="img"><img src="${itm.urlToImage || ''}" /></div></div>
+					<h2>${itm.title}</h2>
+					<div class="pubdate">${App.dateToStr(itm.publishedAt)}</div>
+					<p>${itm.description}</p>
+				</a>
+			</div>`).join('');
+	},
+
+	dateToStr(t) {
+		if(!t){ return ''; }
+		// YYYY-MM-DD:HH-MM
+		function _zero(i){ return i > 9 ? i : '0'+i; }
+			if(typeof t === 'string' || typeof t === 'number'){
+			t = new Date(t);
+		}
+		var str = t.getFullYear();
+		str += '-'+_zero(t.getMonth()+1);
+		str += '-'+_zero(t.getDate());
+		str += ' '+_zero(t.getHours());
+		str += ':'+_zero(t.getMinutes());
+		//str += '-'+_zero(t.getSeconds());
+		return str;
 	}
-	return null;
-}
 
-function toView(data){
-	wrapper.innerHTML = data.articles.map((itm) => `<div class="item"><a href="${itm.url}"><div class="vis"><div class="img"><img src="${itm.urlToImage || ''}" /></div></div><h2>${itm.title}</h2><div class="pubdate">${dateToStr(itm.publishedAt)}</div><p>${itm.description}</p></a></div>`).join('');
-}
+};
 
-function dateToStr(t){
-	if(!t){ return ''; }
-	// YYYY-MM-DD:HH-MM
-	function _zero(i){ return i > 9 ? i : '0'+i; }
-		if(typeof t === 'string' || typeof t === 'number'){
-		t = new Date(t);
-	}
-	var str = t.getFullYear();
-	str += '-'+_zero(t.getMonth()+1);
-	str += '-'+_zero(t.getDate());
-	str += ' '+_zero(t.getHours());
-	str += ':'+_zero(t.getMinutes());
-	//str += '-'+_zero(t.getSeconds());
-	return str;
-}
 
+document.addEventListener("DOMContentLoaded", App.init);
 
 
 /*
