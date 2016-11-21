@@ -20,7 +20,7 @@ let App = {
 	update() {
 
 		let source = App.getSource() || 'google-news';
-		document.querySelector('.header h1').dataset.source = source;
+		document.querySelector('.header h1').setAttribute('data-source',source);
 		App.container.innerHTML = 'Loading data... Please wait.';
 
 		fetch('https://newsapi.org/v1/articles?category=technology&source='+source+'&apiKey='+App.apikey).then(function(response) {
