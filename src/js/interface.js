@@ -10,12 +10,21 @@ class NewsViewer {
 			'the-new-york-times', 'the-telegraph', 'the-washington-post', 'time', 'usa-today'
 		];
 
-		document.querySelector('.nav').innerHTML = this.sources.map((itm) => `<a href="#${itm}">${itm}</a>`).join('');
+		document.querySelector('.nav ul').innerHTML = this.sources.map((itm) => `
+			<li><a href="#${itm}">
+				<span class="img"><img src="http://i.newsapi.org/${itm}-m.png" alt="${itm}"></span>
+				<span class="name">${itm.replace(/-/g,' ')}</span>
+			</a></li>
+			`).join('');
+		this.updSourceName();
 		window.addEventListener('hashchange', ()=>{
 			this.update();
 		}, true);
 
-		this.update();
+		if(this.getSource()){
+			document.body.classList.add('has_data');
+			this.update();
+		}
 	}
 	render(data){
 		this.cssLoad();
@@ -29,6 +38,9 @@ class NewsViewer {
 				</a>
 			</div>`).join('');
 	}
+	updSourceName(text = 'Please select news source...'){
+		document.querySelector('.header h1').setAttribute('data-source',text);
+	}
 	getSource() {
 		if(window.location.hash){
 			let hash = window.location.hash.substring(1);
@@ -36,10 +48,27 @@ class NewsViewer {
 		}
 		return null;
 	}
+	markNav(id){
+		let current = document.querySelector('.nav .active');
+		let active = document.querySelector('.nav [href="#'+id+'"]');
+		if(current){
+			current.classList.remove('active');
+		}
+		if(active){
+			active.parentNode.classList.add('active');
+		}
+	}
 	update(source){
-		source = source || this.getSource() || 'google-news';
-		document.querySelector('.header h1').setAttribute('data-source',source);
+		source = source || this.getSource();
+		if(!source){
+			document.body.classList.remove('has_data');
+			this.updSourceName();
+			return;
+		}
+		this.markNav(source);
+		this.updSourceName(source);
 		this.container.innerHTML = 'Loading data... Please wait.';
+		document.body.classList.add('has_data');
 		let provider = new NewsProvider();
 		provider.get(source, this.render.bind(this));
 	}

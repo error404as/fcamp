@@ -38,9 +38,64 @@ input:-ms-input-placeholder {color:#ccc !important;}
 
 /*_____________ page ______________*/
 
-.nav {text-align: center; font-weight: bold; font-family: monospace;}
-.nav a {display: inline-block; margin: 0 6px; white-space: nowrap;}
-.nav a:hover,.nav a:focus {color: #888; text-decoration: none;}
+.all {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: reverse;
+	-ms-flex-direction: column-reverse;
+	flex-direction: column-reverse;
+}
+
+.nav {
+	max-width: 980px;
+	margin: auto;
+	font-weight: bold; font-family: monospace;
+	text-align: center;
+}
+.nav li {
+	display: inline-block;
+	margin: 20px;
+	-webkit-transition: -webkit-transform .2s linear;
+	transition: -webkit-transform .2s linear;
+	transition: transform .2s linear;
+	transition: transform .2s linear, -webkit-transform .2s linear;
+}
+.nav a { display: block; text-decoration: none; }
+.nav a:hover { color: #888; }
+.nav .img {
+	display: block;
+	position: relative;
+	width: 100px; height: 100px;
+	margin: auto; padding: 5px;
+	box-sizing: border-box;
+}
+.nav .img img {
+	position: absolute; top: 50%; left: 50%;
+	width: 100%;
+	-webkit-transform: translate(-50%, -50%); transform: translate(-50%, -50%);
+}
+.nav .name {
+	display: block;
+	height: 1em;
+	-webkit-transform: scale(.01); transform: scale(.01);
+}
+
+.nav li:hover { -webkit-transform: scale(1.3);transform: scale(1.3); }
+.nav li:hover .name { -webkit-transform: scale(1);transform: scale(1); }
+
+
+/* overrides */
+.has_data .all {-webkit-box-orient: vertical; -webkit-box-direction: normal; -ms-flex-direction: column; flex-direction: column;}
+.has_data .nav li {margin: 5px; border: 1px solid rgba(0,0,0,.3); background: #fff;}
+.has_data .nav li:hover {-webkit-transform: scale(1.1); transform: scale(1.1);}
+.has_data .nav .img {display: none;}
+.has_data .nav .name {-webkit-transform: none; transform: none; height: auto; padding: 5px;}
+.has_data .nav li.active {-webkit-transform: none; transform: none; border-color: #f60 !important;}
+.has_data .nav li.active a {color: #f60;}
+/* overrides end */
+
 
 .header {
 	margin: 20px;
@@ -48,4 +103,6 @@ input:-ms-input-placeholder {color:#ccc !important;}
 }
 .header h1:after {content: '['attr(data-source)']'; display: block; color: #888; font-family: monospace;}
 
-.view {display: none;}
+
+.all .view {display: none;}
+.has_data .view {display: flex;}

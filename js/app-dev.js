@@ -122,14 +122,18 @@
 			this.container = document.querySelector('.view');
 			this.sources = ['bbc-news', 'bloomberg', 'cnn', 'google-news', 'hacker-news', 'mtv-news', 'national-geographic', 'polygon', 'reddit-r-all', 'reuters', 'techradar', 'the-guardian-uk', 'the-new-york-times', 'the-telegraph', 'the-washington-post', 'time', 'usa-today'];
 
-			document.querySelector('.nav').innerHTML = this.sources.map(function (itm) {
-				return '<a href="#' + itm + '">' + itm + '</a>';
+			document.querySelector('.nav ul').innerHTML = this.sources.map(function (itm) {
+				return '\n\t\t\t<li><a href="#' + itm + '">\n\t\t\t\t<span class="img"><img src="http://i.newsapi.org/' + itm + '-m.png" alt="' + itm + '"></span>\n\t\t\t\t<span class="name">' + itm.replace(/-/g, ' ') + '</span>\n\t\t\t</a></li>\n\t\t\t';
 			}).join('');
+			this.updSourceName();
 			window.addEventListener('hashchange', function () {
 				_this.update();
 			}, true);
 
-			this.update();
+			if (this.getSource()) {
+				document.body.classList.add('has_data');
+				this.update();
+			}
 		}
 
 		_createClass(NewsViewer, [{
@@ -143,6 +147,13 @@
 				}).join('');
 			}
 		}, {
+			key: 'updSourceName',
+			value: function updSourceName() {
+				var text = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'Please select news source...';
+
+				document.querySelector('.header h1').setAttribute('data-source', text);
+			}
+		}, {
 			key: 'getSource',
 			value: function getSource() {
 				if (window.location.hash) {
@@ -152,11 +163,30 @@
 				return null;
 			}
 		}, {
+			key: 'markNav',
+			value: function markNav(id) {
+				var current = document.querySelector('.nav .active');
+				var active = document.querySelector('.nav [href="#' + id + '"]');
+				if (current) {
+					current.classList.remove('active');
+				}
+				if (active) {
+					active.parentNode.classList.add('active');
+				}
+			}
+		}, {
 			key: 'update',
 			value: function update(source) {
-				source = source || this.getSource() || 'google-news';
-				document.querySelector('.header h1').setAttribute('data-source', source);
+				source = source || this.getSource();
+				if (!source) {
+					document.body.classList.remove('has_data');
+					this.updSourceName();
+					return;
+				}
+				this.markNav(source);
+				this.updSourceName(source);
 				this.container.innerHTML = 'Loading data... Please wait.';
+				document.body.classList.add('has_data');
 				var provider = new NewsProvider();
 				provider.get(source, this.render.bind(this));
 			}
