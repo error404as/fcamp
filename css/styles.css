@@ -36,7 +36,7 @@ input::-moz-placeholder {color:#ccc !important;} /* FF  19+ */
 input:-ms-input-placeholder {color:#ccc !important;}
 .clearfix:after {content:"."; height:0; visibility:hidden; display:block; clear:both;}
 
-/*--------------Page-----------------*/
+/*_____________ page ______________*/
 
 .nav {text-align: center; font-weight: bold; font-family: monospace;}
 .nav a {display: inline-block; margin: 0 6px; white-space: nowrap;}
@@ -48,51 +48,4 @@ input:-ms-input-placeholder {color:#ccc !important;}
 }
 .header h1:after {content: '['attr(data-source)']'; display: block; color: #888; font-family: monospace;}
 
-.view {
-	display: flex; flex-wrap: wrap; justify-content: space-around;
-	max-width: 1150px;
-	margin: 20px auto;
-}
-.item {
-	width: 33.3%;
-	text-align: left;
-}
-.item a {
-	display: block;
-	height: 100%;
-	padding: 3%;
-	border: 1px solid transparent;
-	color: #000;
-	text-decoration: none;
-	box-sizing: border-box;
-	transition: all .2s linear;
-}
-.item a:hover,
-.item a:focus {
-	border-color: #bbb;
-	background: #f7f7f7;
-	opacity: .8;
-}
-.item h2 { margin-bottom: 5px; }
-.item .vis {
-	position: relative;
-	padding-top: 60%;
-	margin-bottom: 10px;
-}
-.item .vis .img {
-	position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-}
-.item .vis img {
-	display: block;
-	width: 100%; height: 100%;
-	object-fit: cover;
-	outline: 1px solid rgba(0,0,0,.4);
-}
-.item .pubdate { margin-bottom: 5px; font-size: .9em; color: #888; }
-
-@media screen and (max-width:860px) {
-	.item { width: 50%; }
-}
-@media screen and (max-width:500px) {
-	.item { width: 100%; }
-}
+.view {display: none;}
