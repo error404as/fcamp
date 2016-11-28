@@ -5,6 +5,6 @@
 
 `npm run dev-server`  (runs dev config , localhost:8000)
 
-[index dev](error404as.github.io/fcamp/index-dev.html)
+[index dev](https://error404as.github.io/fcamp/index-dev.html)
 
-[index prod](error404as.github.io/fcamp/index.html)
+[index prod](https://error404as.github.io/fcamp/index.html)
