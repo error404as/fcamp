@@ -1,3 +1,4 @@
+const path = require('path');
 
 module.exports = {
 	entry:{
@@ -8,6 +9,13 @@ module.exports = {
 		filename: '[name]-dev.js',
 		publicPath:  './build/'
 	},
+	// https://github.com/webpack/webpack/issues/903
+	resolveLoader: {
+		fallback: [
+			path.resolve(__dirname, 'loaders'),
+			path.join(process.cwd(), 'node_modules')
+		]
+	},
 	module: {
 		loaders: [
 			{
@@ -17,6 +25,10 @@ module.exports = {
 				query: {
 					presets: ['es2015']
 				}
+			},
+			{
+				test: /\.json$/,
+				loader: 'json!newsNames'
 			},
 			{
 				test: /\.(png|jpg)$/,
@@ -31,6 +43,7 @@ module.exports = {
 	plugins: [ ],
 	devServer: {
 		host: 'localhost',
+		inline: true,
 		port: 8000,
 		contentBase: '.'
 	}

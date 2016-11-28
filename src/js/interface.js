@@ -22,9 +22,9 @@ class NewsViewer {
 	}
 	renderNav(){
 		document.querySelector('.nav ul').innerHTML = this.sources.map((itm) => `
-			<li><a href="#${itm}">
-				<span class="img"><img src="http://i.newsapi.org/${itm}-m.png" alt="${itm}"></span>
-				<span class="name">${itm.replace(/-/g,' ')}</span>
+			<li><a href="#${itm.name}">
+				<span class="img"><img src="http://i.newsapi.org/${itm.name}-m.png" alt="${itm.title}"></span>
+				<span class="name">${itm.title}</span>
 			</a></li>
 			`).join('');
 	}
@@ -46,7 +46,7 @@ class NewsViewer {
 	getSource() {
 		if(window.location.hash){
 			let hash = window.location.hash.substring(1);
-			return this.sources.indexOf(hash) !== -1 ? hash : null;
+			return this.sources.filter(itm => itm.name === hash).length ? hash : null;
 		}
 		return null;
 	}
@@ -115,11 +115,10 @@ class NewsProvider {
 
 
 document.addEventListener("DOMContentLoaded", function(){
-	fetch('sources.json').then(function(response) {
-		return response.json();
-	}).then(function(response) {
-		new NewsViewer(response);
-	});
+
+	let sources = require('../sources.json');
+	new NewsViewer(sources);
+
 });
 
 

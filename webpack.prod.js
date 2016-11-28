@@ -1,4 +1,5 @@
 const webpack = require('webpack');
+const path = require('path');
 
 module.exports = {
 	entry:{
@@ -9,6 +10,13 @@ module.exports = {
 		filename: '[name].js',
 		publicPath:  './build/'
 	},
+	// https://github.com/webpack/webpack/issues/903
+	resolveLoader: {
+		fallback: [
+			path.resolve(__dirname, 'loaders'),
+			path.join(process.cwd(), 'node_modules')
+		]
+	},
 	module: {
 		loaders: [
 			{
@@ -18,6 +26,10 @@ module.exports = {
 				query: {
 					presets: ['es2015']
 				}
+			},
+			{
+				test: /\.json$/,
+				loader: 'json!newsNames'
 			},
 			{
 				test: /\.(png|jpg)$/,
