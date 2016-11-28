@@ -1,22 +1,16 @@
 import 'es6-promise/auto';
 import 'whatwg-fetch';
 
-class NewsViewer {
-	constructor(){
-		this.container = document.querySelector('.view');
-		this.sources = [
-			'bbc-news', 'bloomberg', 'cnn', 'google-news', 'hacker-news', 'mtv-news',
-			'national-geographic', 'polygon', 'reddit-r-all', 'reuters', 'techradar', 'the-guardian-uk',
-			'the-new-york-times', 'the-telegraph', 'the-washington-post', 'time', 'usa-today'
-		];
+let noImg = require('../images/no_photo.png');
 
-		document.querySelector('.nav ul').innerHTML = this.sources.map((itm) => `
-			<li><a href="#${itm}">
-				<span class="img"><img src="http://i.newsapi.org/${itm}-m.png" alt="${itm}"></span>
-				<span class="name">${itm.replace(/-/g,' ')}</span>
-			</a></li>
-			`).join('');
+class NewsViewer {
+	constructor(sources){
+		this.container = document.querySelector('.view');
+		this.sources = sources || [];
+
+		this.renderNav();
 		this.updSourceName();
+		
 		window.addEventListener('hashchange', ()=>{
 			this.update();
 		}, true);
@@ -26,12 +20,20 @@ class NewsViewer {
 			this.update();
 		}
 	}
+	renderNav(){
+		document.querySelector('.nav ul').innerHTML = this.sources.map((itm) => `
+			<li><a href="#${itm}">
+				<span class="img"><img src="http://i.newsapi.org/${itm}-m.png" alt="${itm}"></span>
+				<span class="name">${itm.replace(/-/g,' ')}</span>
+			</a></li>
+			`).join('');
+	}
 	render(data){
 		this.cssLoad();
 		this.container.innerHTML = data.map((itm) => `
 			<div class="item">
 				<a href="${itm.url}">
-					<div class="vis"><div class="img"><img src="${itm.urlToImage || 'images/no_photo.png'}" /></div></div>
+					<div class="vis"><div class="img"><img src="${itm.urlToImage || noImg}" /></div></div>
 					<h2>${itm.title}</h2>
 					<div class="pubdate">${this.dateToStr(itm.publishedAt)}</div>
 					<p>${itm.description || ''}</p>
@@ -113,7 +115,11 @@ class NewsProvider {
 
 
 document.addEventListener("DOMContentLoaded", function(){
-	new NewsViewer();
+	fetch('sources.json').then(function(response) {
+		return response.json();
+	}).then(function(response) {
+		new NewsViewer(response);
+	});
 });
 
 

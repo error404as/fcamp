@@ -2,19 +2,26 @@ const webpack = require('webpack');
 
 module.exports = {
 	entry:{
-		app: __dirname + '/src/scripts.js',
+		app: __dirname + '/src/index.js',
 	},
 	output: {
-		path: __dirname + '/js',
+		path: __dirname + '/build',
 		filename: '[name].js',
-		publicPath:  './js/'
+		publicPath:  './build/'
 	},
 	module: {
 		loaders: [
 			{
 				test: /\.js$/,
 				exclude: /node_modules/,
-				loader: 'babel-loader'
+				loader: 'babel',
+				query: {
+					presets: ['es2015']
+				}
+			},
+			{
+				test: /\.(png|jpg)$/,
+				loader: 'url?limit=20000'
 			},
 			{
 				test: /\.less$/,
