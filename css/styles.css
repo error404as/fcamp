@@ -101,8 +101,9 @@ input:-ms-input-placeholder {color:#ccc !important;}
 	margin: 20px;
 	text-align: center;
 }
-.header h1:after {content: '['attr(data-source)']'; display: block; color: #888; font-family: monospace;}
+.js-ready .header h1:after {content: '['attr(data-source)']'; display: block; color: #888; font-family: monospace;}
 
 
 .all .view {display: none;}
-.has_data .view {display: flex;}
+.view .loading {position: absolute; left: 0; right: 0; text-align: center;}
+.has_data .all .view {display: -webkit-box; display: -ms-flexbox; display: flex;}

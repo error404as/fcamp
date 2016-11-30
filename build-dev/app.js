@@ -2034,6 +2034,7 @@
 			value: function updSourceName() {
 				var text = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'Please select news source...';
 
+				document.body.classList.add('js-ready');
 				document.querySelector('.header h1').setAttribute('data-source', text);
 			}
 		}, {
@@ -2078,7 +2079,7 @@
 				}
 				this.markNav(source);
 				this.updSourceName(source);
-				this.container.innerHTML = 'Loading data... Please wait.';
+				this.container.innerHTML = '<div class="loading">Loading data... Please wait.</div>';
 				document.body.classList.add('has_data');
 				var provider = new _newsProvider2.default();
 				provider.get(source, this.render.bind(this));

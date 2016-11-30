@@ -1,4 +1,4 @@
-import NewsProvider from './news-provider';
+import Provider from './news-provider';
 
 let noImg = require('../images/no_photo.png');
 
@@ -43,6 +43,7 @@ class Viewer {
 		});
 	}
 	updSourceName(text = 'Please select news source...'){
+		document.body.classList.add('js-ready');
 		document.querySelector('.header h1').setAttribute('data-source',text);
 	}
 	getSource() {
@@ -71,9 +72,9 @@ class Viewer {
 		}
 		this.markNav(source);
 		this.updSourceName(source);
-		this.container.innerHTML = 'Loading data... Please wait.';
+		this.container.innerHTML = '<div class="loading">Loading data... Please wait.</div>';
 		document.body.classList.add('has_data');
-		let provider = new NewsProvider();
+		let provider = new Provider();
 		provider.get(source, this.render.bind(this));
 	}
 	dateToStr(t) {
