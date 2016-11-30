@@ -1,13 +1,14 @@
 const path = require('path');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = {
 	entry:{
 		app: __dirname + '/src/index.js',
 	},
 	output: {
-		path: __dirname + '/build',
-		filename: '[name]-dev.js',
-		publicPath:  './build/'
+		path: __dirname + '/build-dev',
+		filename: '[name].js',
+		publicPath:  './build-dev/'
 	},
 	// https://github.com/webpack/webpack/issues/903
 	resolveLoader: {
@@ -40,7 +41,11 @@ module.exports = {
 			}
 		]
 	},
-	plugins: [ ],
+	plugins: [
+		new CleanWebpackPlugin(['build-dev'], {
+			verbose: true
+		})
+	],
 	devServer: {
 		host: 'localhost',
 		inline: true,
