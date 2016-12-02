@@ -4,28 +4,34 @@ let noImg = require('../images/no_photo.png');
 
 class Viewer {
 	constructor(sources){
+		this.nav = document.querySelector('.nav ul');
 		this.container = document.querySelector('.view');
 		this.sources = sources || [];
 
+		this.initView();
+		this.attachHandlers();
+
+		this.update();
+	}
+	initView(){
 		this.renderNav();
-		this.updSourceName();
-		
+		this.setAppState('js-ready');
+	}
+	attachHandlers(){
 		window.addEventListener('hashchange', ()=>{
 			this.update();
 		}, true);
-
-		if(this.getSource()){
-			document.body.classList.add('has_data');
-			this.update();
-		}
 	}
 	renderNav(){
-		document.querySelector('.nav ul').innerHTML = this.sources.map((itm) => `
+		this.nav.innerHTML = this.sources.map((itm) => `
 			<li><a href="#${itm.name}">
 				<span class="img"><img src="http://i.newsapi.org/${itm.name}-m.png" alt="${itm.title}"></span>
 				<span class="name">${itm.title}</span>
 			</a></li>
 			`).join('');
+	}
+	renderPlaceholder(){
+		this.container.innerHTML = '<div class="loading">Loading data... Please wait.</div>';
 	}
 	render(data){
 		this.entriesStyling(()=>{
@@ -43,7 +49,6 @@ class Viewer {
 		});
 	}
 	updSourceName(text = 'Please select news source...'){
-		document.body.classList.add('js-ready');
 		document.querySelector('.header h1').setAttribute('data-source',text);
 	}
 	getSource() {
@@ -54,8 +59,8 @@ class Viewer {
 		return null;
 	}
 	markNav(id){
-		let current = document.querySelector('.nav .active');
-		let active = document.querySelector('.nav [href="#'+id+'"]');
+		let current = this.nav.querySelector('.active');
+		let active = this.nav.querySelector('[href="#'+id+'"]');
 		if(current){
 			current.classList.remove('active');
 		}
@@ -66,16 +71,22 @@ class Viewer {
 	update(source){
 		source = source || this.getSource();
 		if(!source){
-			document.body.classList.remove('has_data');
+			this.unsetAppState('has_data');
 			this.updSourceName();
 			return;
 		}
 		this.markNav(source);
 		this.updSourceName(source);
-		this.container.innerHTML = '<div class="loading">Loading data... Please wait.</div>';
-		document.body.classList.add('has_data');
-		let provider = new Provider();
-		provider.get(source, this.render.bind(this));
+		this.setAppState('has_data');
+		this.renderPlaceholder();
+		new Provider().get(source, this.render.bind(this));
+	}
+
+	setAppState(state){
+		document.body.classList.add(state);
+	}
+	unsetAppState(state){
+		document.body.classList.remove(state);
 	}
 	dateToStr(t) {
 		if(!t){ return ''; }
