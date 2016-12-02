@@ -1,5 +1,6 @@
 class Provider {
 	constructor(){
+		console.log('LOG: provider init');
 		this.apikey = 'd3a3b4d86b5d48dd98a34ed0bcebfa07';
 	}
 	get(source, callback){
@@ -14,4 +15,4 @@ class Provider {
 	}
 }
 
-export default Provider;
+export default new Provider();

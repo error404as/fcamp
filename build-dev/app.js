@@ -2084,7 +2084,7 @@
 				this.updSourceName(source);
 				this.setAppState('has_data');
 				this.renderPlaceholder();
-				new _newsProvider2.default().get(source, this.render.bind(this));
+				_newsProvider2.default.get(source, this.render.bind(this));
 			}
 		}, {
 			key: 'setAppState',
@@ -2152,6 +2152,7 @@
 		function Provider() {
 			_classCallCheck(this, Provider);
 
+			console.log('LOG: provider init');
 			this.apikey = 'd3a3b4d86b5d48dd98a34ed0bcebfa07';
 		}
 
@@ -2172,7 +2173,7 @@
 		return Provider;
 	}();
 
-	exports.default = Provider;
+	exports.default = new Provider();
 
 /***/ },
 /* 8 */

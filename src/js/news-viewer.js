@@ -79,7 +79,7 @@ class Viewer {
 		this.updSourceName(source);
 		this.setAppState('has_data');
 		this.renderPlaceholder();
-		new Provider().get(source, this.render.bind(this));
+		Provider.get(source, this.render.bind(this));
 	}
 
 	setAppState(state){
