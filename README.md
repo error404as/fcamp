@@ -8,3 +8,7 @@
 [index dev](https://error404as.github.io/fcamp/index-dev.html)
 
 [index prod](https://error404as.github.io/fcamp/index.html)
+
+##Design Patters used
+- Module singleton for `Provider`
+- Facade in `Viewer.updateView`

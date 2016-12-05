@@ -1974,6 +1974,10 @@
 
 	var _newsProvider2 = _interopRequireDefault(_newsProvider);
 
+	var _helpers = __webpack_require__(14);
+
+	var _helpers2 = _interopRequireDefault(_helpers);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -1991,14 +1995,14 @@
 			this.initView();
 			this.attachHandlers();
 
-			this.update();
+			this.updateView();
 		}
 
 		_createClass(Viewer, [{
 			key: 'initView',
 			value: function initView() {
 				this.renderNav();
-				this.setAppState('js-ready');
+				_helpers2.default.setAppState('js-ready');
 			}
 		}, {
 			key: 'attachHandlers',
@@ -2006,7 +2010,7 @@
 				var _this = this;
 
 				window.addEventListener('hashchange', function () {
-					_this.update();
+					_this.updateView();
 				}, true);
 			}
 		}, {
@@ -2022,14 +2026,13 @@
 				this.container.innerHTML = '<div class="loading">Loading data... Please wait.</div>';
 			}
 		}, {
-			key: 'render',
-			value: function render(data) {
+			key: 'renderItems',
+			value: function renderItems(data) {
 				var _this2 = this;
 
 				this.entriesStyling(function () {
-
 					_this2.container.innerHTML = data.map(function (itm) {
-						return '\n\t\t\t\t<div class="item">\n\t\t\t\t\t<a href="' + itm.url + '">\n\t\t\t\t\t\t<div class="vis"><div class="img"><img src="' + (itm.urlToImage || noImg) + '" /></div></div>\n\t\t\t\t\t\t<h2>' + itm.title + '</h2>\n\t\t\t\t\t\t<div class="pubdate">' + _this2.dateToStr(itm.publishedAt) + '</div>\n\t\t\t\t\t\t<p>' + (itm.description || '') + '</p>\n\t\t\t\t\t</a>\n\t\t\t\t</div>';
+						return '\n\t\t\t\t<div class="item">\n\t\t\t\t\t<a href="' + itm.url + '">\n\t\t\t\t\t\t<div class="vis"><div class="img"><img src="' + (itm.urlToImage || noImg) + '" /></div></div>\n\t\t\t\t\t\t<h2>' + itm.title + '</h2>\n\t\t\t\t\t\t<div class="pubdate">' + _helpers2.default.dateToStr(itm.publishedAt) + '</div>\n\t\t\t\t\t\t<p>' + (itm.description || '') + '</p>\n\t\t\t\t\t</a>\n\t\t\t\t</div>';
 					}).join('');
 				});
 			}
@@ -2072,50 +2075,29 @@
 				}
 			}
 		}, {
-			key: 'update',
-			value: function update(source) {
-				source = source || this.getSource();
-				if (!source) {
-					this.unsetAppState('has_data');
-					this.updSourceName();
-					return;
+			key: 'updateView',
+			value: function updateView() {
+				var source = source || this.getSource();
+				if (source) {
+					this.fetchNews(source);
+				} else {
+					this.renderEmpty();
 				}
+			}
+		}, {
+			key: 'renderEmpty',
+			value: function renderEmpty() {
+				_helpers2.default.unsetAppState('has_data');
+				this.updSourceName();
+			}
+		}, {
+			key: 'fetchNews',
+			value: function fetchNews(source) {
 				this.markNav(source);
 				this.updSourceName(source);
-				this.setAppState('has_data');
+				_helpers2.default.setAppState('has_data');
 				this.renderPlaceholder();
-				_newsProvider2.default.get(source, this.render.bind(this));
-			}
-		}, {
-			key: 'setAppState',
-			value: function setAppState(state) {
-				document.body.classList.add(state);
-			}
-		}, {
-			key: 'unsetAppState',
-			value: function unsetAppState(state) {
-				document.body.classList.remove(state);
-			}
-		}, {
-			key: 'dateToStr',
-			value: function dateToStr(t) {
-				if (!t) {
-					return '';
-				}
-				// YYYY-MM-DD:HH-MM
-				function _zero(i) {
-					return i > 9 ? i : '0' + i;
-				}
-				if (typeof t === 'string' || typeof t === 'number') {
-					t = new Date(t);
-				}
-				var str = t.getFullYear();
-				str += '-' + _zero(t.getMonth() + 1);
-				str += '-' + _zero(t.getDate());
-				str += ' ' + _zero(t.getHours());
-				str += ':' + _zero(t.getMinutes());
-				//str += '-'+_zero(t.getSeconds());
-				return str;
+				_newsProvider2.default.get(source, this.renderItems.bind(this));
 			}
 		}, {
 			key: 'entriesStyling',
@@ -2259,6 +2241,45 @@
 			"title": "usa today"
 		}
 	];
+
+/***/ },
+/* 14 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	var helpers = {
+		setAppState: function setAppState(state) {
+			document.body.classList.add(state);
+		},
+		unsetAppState: function unsetAppState(state) {
+			document.body.classList.remove(state);
+		},
+		dateToStr: function dateToStr(t) {
+			if (!t) {
+				return '';
+			}
+			// YYYY-MM-DD:HH-MM
+			function _zero(i) {
+				return i > 9 ? i : '0' + i;
+			}
+			if (typeof t === 'string' || typeof t === 'number') {
+				t = new Date(t);
+			}
+			var str = t.getFullYear();
+			str += '-' + _zero(t.getMonth() + 1);
+			str += '-' + _zero(t.getDate());
+			str += ' ' + _zero(t.getHours());
+			str += ':' + _zero(t.getMinutes());
+			//str += '-'+_zero(t.getSeconds());
+			return str;
+		}
+	};
+
+	exports.default = helpers;
 
 /***/ }
 /******/ ]);
