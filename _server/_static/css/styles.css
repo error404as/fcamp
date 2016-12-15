@@ -1,0 +1,178 @@
+html, body, h1, h2, h3, h4, h5, h6, p, em, strong, abbr, acronym, blockquote, q, cite, ins, del, dfn, a, div, span, pre, hr, address, br, b, i, sub, sup, big, small, tt, table, tr, caption, thead, tbody, tfoot, col, colgroup, form, input, label, textarea, button, fieldset, legend, select, option, optiongroup, ul, ol, li, dl, dt, dd, code, var, kdb, samp, img, object, param, map, area, bdo, iframe {padding:0; margin:0;}
+article, aside, figure, footer, header, nav, section, hgroup {display:block;}
+html,body {min-height:100%;}
+body {
+	background:#fff;
+	font: 16px/1.67 "Helvetica Neue", Helvetica, Arial, sans-serif; color: #4a4a4a;
+}
+html{-ms-text-size-adjust: 100%; -webkit-text-size-adjust:100%;}
+body {
+	text-rendering: auto;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+body.touch {cursor: pointer; -webkit-tap-highlight-color: rgba(0,0,0,0);}
+a {color: #c14550; text-decoration: underline; cursor: pointer; outline: none;}
+a:hover {text-decoration: none;}
+fieldset {border:0;}
+h1 {font-size:42px;}
+h2 {font-size:38px;}
+h3 {font-size:20px;}
+h4 {font-size:19px;}
+h5 {font-size:16px;}
+h1, h2, h3, h4, h5 {line-height:1.2; font-weight: normal;}
+li {margin-left:25px;}
+hr {clear: both; height: 1px; margin: 22px 0 25px; overflow: hidden; background: #4a4a4a; border: 0;}
+img {border:0; max-width: 100%; max-height: 100%;}
+strong {font-weight: bold;}
+input {vertical-align:middle;}
+button,
+input.btn,
+input[type=button],
+input[type=submit],
+input[type=reset] {cursor:pointer; overflow:visible; font-family: Arial, sans-serif; outline-color: #dd9e9f;}
+input[type=text],
+input[type=password],
+input[type=date],
+input[type=tel],
+input[type=email],
+input[type=number],
+input.form-input {
+	padding:8px 10px;
+	background:#fff;
+	border: 1px solid #d9d9d9;
+	font: 16px/1.2 Arial, sans-serif; color:#4a4a4a;
+	outline:none; box-sizing: border-box;
+}
+textarea {
+	padding:6px 12px;
+	background:#fff;
+	border: 1px solid #d9d9d9;
+	font:16px/1.2 Arial, sans-serif; color:#4a4a4a;
+	outline:none; box-sizing: border-box;
+}
+select {
+	height: 35px;
+	vertical-align:middle;
+	padding:2px 5px;
+	background:#fff;
+	border: 1px solid #e1e1e0;
+	font:16px/32px Arial, sans-serif; color:#4a4a4a;
+	box-sizing: border-box;
+}
+input[type=text],
+input[type=password],
+input[type=date],
+input[type=tel],
+input[type=button],
+input[type=submit],
+input[type=reset],
+button,
+textarea {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	border-radius: 0;
+}
+
+/*---------------------------*/
+
+.all {
+	max-width: 1100px;
+	margin: auto;
+}
+
+.header {overflow: hidden; background: #2f2f2f; margin-bottom: 30px; padding: 5px 5px 5px 20px;}
+.header .logo {float: left; height: 50px; font: 40px/45px Georgia;}
+.header .logo a {text-decoration: none;}
+.header .logo a:hover {color: #fff;}
+.header .nav {float: right;}
+.header .nav li {float: left; margin: 0; list-style: none;}
+.header .nav a {display: block; padding: 12px 20px; height: 50px; box-sizing: border-box; color: #fff; text-decoration: none;}
+.header .nav a:hover {background: #525252;}
+
+.main {display: flex; padding: 0 15px;}
+.main .content {width: 80%;}
+.main .sidebar {padding-left: 40px;}
+.main h1 {margin-bottom: 10px;}
+.main h2 {margin-bottom: 10px;}
+.main h3 {margin-bottom: 10px;}
+.main p {margin-bottom: 10px;}
+.main ul,
+.main ol {margin-bottom: 10px;}
+.main .meta {float: right; font-size: 13px; color: #999;}
+
+.posts-list {overflow: hidden; margin-bottom: 30px;}
+.post-item {float: left; position: relative; width: 47.9%; margin: 0 1% 3%; box-sizing: border-box; box-shadow: 0 0 6px rgba(0,0,0,0.2); transition: box-shadow 0.2s linear;}
+.post-item:hover {box-shadow: 0 0 8px rgba(0,0,0,0.6);}
+.post-item a {display: block; text-decoration: none; color: #333;}
+.post-item .vis {position: relative; padding-top: 60%; overflow: hidden;}
+.post-item .vis img {display: block; position: absolute; top: 50%; left: 50%; min-width: 100%; min-height: 100%; transform: translate(-50%,-50%); max-height: inherit; /* max-height because high images are more expected than wide */}
+.post-item .info {height: 80px; text-align: center; padding: 5px 15px;}
+.post-item .info .headline {position: absolute; top: 100%; left: 0; right: 0; margin-top: -55px; max-height: 50px; overflow: hidden; font-size: 21px; line-height: 1.2; transform: translateY(-50%);}
+.post-item .info .meta {position: absolute; bottom: 5px; left: 0; right: 0;}
+.post-item.no-image a {position: relative; padding-top: calc(60% + 90px);}
+.post-item.no-image .info {position: absolute; top: 50%; left: 0; right: 0; transform: translateY(-50%);}
+
+.tags li {display: inline-block; vertical-align: middle; margin: 0 6px 6px 0; border: 1px solid #eee;}
+.tags li a {display: block; text-decoration: none; padding: 5px 10px;}
+.tags li a:hover {background: #f5f5f5;}
+
+
+.footer {background: #2f2f2f; margin-top: 20px; padding: 5px 20px; color: #fff; overflow: hidden;}
+.footer .soc-icons {float: right; font-size: 20px;}
+.footer .soc-icons .fa {margin-left: 6px; color: #fff; text-decoration: none;}
+
+
+@media screen and (max-width:1023px) {
+	.main {display: block;}
+	.main .content {width: auto;}
+	.main .sidebar {padding-left: 0;}
+	.post-item {width: 31.3%;}
+}
+@media screen and (max-width:679px) {
+	.post-item {width: 47.9%;}
+}
+@media screen and (max-width:440px) {
+	.posts-list {overflow: visible;}
+	.post-item {float: none; width: auto; margin: 0 0 3%;}
+	.post-item .vis {padding-top: 60px;}
+	.post-item .info {height: auto;}
+	.post-item .info .headline {position: static; margin: 0; font-size: 18px; transform: none;}
+	.post-item .info .meta {position: static; margin-top: 5px; float: none;}
+	.post-item.no-image a {padding: 10px 0;}
+	.post-item.no-image .info {position: static; transform: none;}
+
+}
+
+
+
+.button {
+	position: relative;
+	display: inline-block; vertical-align: middle;
+	overflow: hidden;
+	border: 2px solid #c14550;
+	padding: 0 25px;
+	background: transparent;
+	font-size: 16px; font-family: Arial, sans-serif; line-height: 42px; color: #c14550 !important;
+	text-decoration: none; white-space: nowrap;
+	transition: background .3s, color .3s;
+	cursor: pointer; outline: none; box-sizing: border-box;
+}
+.button:hover {background: #c14550; color: #fff !important;}
+
+.button input {
+	height: 50px;
+	background: none; border: 0;
+	margin: 0 -46px 0 -25px;
+	padding: 0 46px 5px 25px;
+	font-size: 16px; font-family: Arial, sans-serif; color: #c14550 !important;
+	outline: none;
+}
+.button:hover input {color: #fff !important;}
+
+.button--reverse {background: #c14550; color: #fff !important;}
+.button--reverse:hover {color: #c14550 !important; background: #fff;}
+.button--reverse input {color: #fff !important;}
+.button--reverse:hover input {color: #c14550 !important;}
+
+
