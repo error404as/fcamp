@@ -1,0 +1,188 @@
+<!DOCTYPE HTML>
+<html lang="ru">
+<head>
+<title>My Blog</title>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="css/font-awesome.min.css" type="text/css" media="screen, projection">
+<link rel="stylesheet" href="css/styles.css" type="text/css" media="screen, projection">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+</head>
+<body>
+
+<div class="all">
+	<div class="header">
+		<div class="logo"><a href="index.html">My Blog</a></div>
+		<div class="nav">
+			<ul>
+				<li><a href="add.html">Add post</a></li>
+				<li><a href="#">Stats</a></li>
+				<li><a href="#">Sign out</a></li>
+			</ul>
+		</div>
+	</div>
+	<form action="" method="post" id="add_post">
+		<div class="main">
+			<div class="content">
+				<h2>Add new post</h2>
+				<div class="form-item">
+					<label for="post_headline">Title</label>
+					<input type="text" class="form-text" name="post_headline" id="post_headline" required>
+				</div>
+				<div class="form-item">
+					<label for="post_body">Cotent</label>
+					<textarea name="post_body" id="post_body" cols="30" rows="10" required></textarea>
+				</div>
+				<div class="form-item">
+					<label for="post_tags">Tags</label>
+					<input type="text" class="form-text" name="post_tags" id="post_tags">
+					<div class="sub">Comma separated tags. Eg: sport, dev, my trip, web</div>
+				</div>
+			</div>
+			<aside class="sidebar">
+				<div class="form-item">
+					<label for="">URL</label>
+					<input type="text" class="form-text" name="post_permalink" id="post_permalink" required>
+					<div class="sub" id="post_permalink_preview">http://localhost/post/hello-world</div>
+					<script>
+						(function(){
+
+							function formatURL(){
+								var link = document.getElementById('post_permalink').value.trim();
+								document.getElementById('post_permalink').value = link;
+
+								var result = window.location.host || '';
+								if(result){
+									result = window.location.protocol + '//' + result;
+								}
+								result += '/post/'+link;
+								document.getElementById('post_permalink_preview').innerHTML = result;
+							}
+							formatURL();
+
+							document.getElementById('post_permalink').addEventListener('input', formatURL, true);
+							document.getElementById('post_permalink').addEventListener('change', formatURL, true);
+						})();
+					</script>
+				</div>
+				<div class="form-item">
+					<label for="post_date">Date</label>
+					<input type="text" class="form-text" name="post_date" id="post_date" placeholder="YYYY-MM-DD HH:MM">
+					<input type="hidden" name="post_date_utc" id="post_date_utc">
+					<script>
+						(function(){
+
+							function setViewDate(d){
+								var date = new Date(d);
+								var offset = date.getTimezoneOffset() * 60 * 1000;
+								var string = new Date( date-offset ).toISOString();
+								var stringDate = string.substring(0, string.lastIndexOf(':')).replace('T', ' ');
+								return stringDate;
+							}
+
+							var date = new Date();
+							document.getElementById('post_date').value = setViewDate(date);
+							document.getElementById('post_date_utc').value = date.toISOString();
+
+							document.getElementById('post_date').addEventListener('change', function(){
+								try{
+									console.log(this.value)
+
+									var val = this.value.trim();
+									if(val.indexOf(':') === -1){
+										val += ' 00:00';
+									}
+
+									if(new Date('2016-12-15T17:08').toISOString().indexOf('2016-12-15T17:08') !== 0){
+										// I know, this is IE ;)
+										val = val.replace(' ','T');
+									}
+									console.log(val)
+
+									document.getElementById('post_date_utc').value = new Date(val).toISOString();
+									console.log(document.getElementById('post_date_utc').value)
+								}catch(e){ }
+
+								// any case, format and re-set to input
+								document.getElementById('post_date').value = setViewDate(document.getElementById('post_date_utc').value);
+								console.log(document.getElementById('post_date').value)
+							}, true);
+						})();
+					</script>
+				</div>
+				<div class="form-item">
+					<label for="post_image">Cover image</label>
+					<input type="file" name="post_image" id="post_image">
+					<div class="preview"><img src="pictures/github.jpg" id="post_image_view" alt=""></div>
+					<script>
+						document.getElementById('post_image').addEventListener('change', function(){ console.log(this.value) }, true);
+					</script>
+				</div>
+			</aside>
+		</div>
+		<div class="foot-content">
+			<div class="form-action">
+				<button type="submit" class="button">Publish</button>
+			</div>
+		</div>
+	</form>
+	<script>
+		document.getElementById('add_post').addEventListener('submit', function(e){
+			e.preventDefault();
+
+			// most errors will be catch by [required] attr, but need more validations here
+			var has_errors = checkRequired(this);
+
+			if(has_errors){ return false; }
+
+			var data = {
+				title: document.getElementById('post_headline').value.trim(),
+				body: document.getElementById('post_body').value,
+				tags: document.getElementById('post_tags').value.trim(),
+				permalink: document.getElementById('post_permalink').value,
+				date: document.getElementById('post_date_utc').value,
+				image: document.getElementById('post_image_view') ? document.getElementById('post_image_view').getAttribute('src') : '',
+			};
+
+			if(data.tags){
+				data.tags = data.tags.split(',').map(function(itm){ return itm.trim() }).filter(function(itm){ return itm });
+			}
+
+			console.log(data)
+
+			return false;
+		});
+		function checkRequired(form){
+			var elems = form.querySelectorAll('[required]');
+			var has_errors = false;
+			for(var i = 0, len = elems.length; i < len; i++){
+				if(elems[i].value.trim()){
+					elems[i].classList.remove('error');
+				} else {
+					has_errors = true;
+					elems[i].classList.add('error');
+				}
+			}
+			return has_errors;
+		}
+
+		function requiredChecker(){
+			if(this.classList.contains('error') && this.value.trim()){
+				this.classList.remove('error');
+			}
+		}
+		document.getElementById('post_headline').addEventListener('change', requiredChecker, true);
+		document.getElementById('post_body').addEventListener('change', requiredChecker, true);
+		document.getElementById('post_permalink').addEventListener('change', requiredChecker, true);
+
+	</script>
+	<div class="footer">
+		<div class="soc-icons">
+			<a href="#" class="fa fa-facebook-square" aria-hidden="true"></a>
+			<a href="#" class="fa fa-twitter-square" aria-hidden="true"></a>
+			<a href="#" class="fa fa-instagram" aria-hidden="true"></a>
+		</div>
+	</div>
+</div>
+
+</body>
+</html>
