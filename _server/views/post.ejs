@@ -21,21 +21,17 @@
 	</div>
 	<div class="main">
 		<div class="content">
-			<div class="posts-list">
-				<% posts.forEach(function(post){ %>
-					<div class="post-item <% if(!post.image){ %>no-image<% } %>">
-						<a href="/article/<%= post.permalink %>">
-							<% if(post.image){ %>
-							<div class="vis"><img src="/<%= post.image.replace(/\\/g,'/') %>" alt="<%= post.headline %>"></div>
-							<% } %>
-							<div class="info">
-								<div class="headline"><%= post.headline %></div>
-								<div class="meta"><%= moment(post.created).format('YYYY-MM-DD') %> by <%= post.author %></div>
-							</div>
-						</a>
-					</div>
-				<% }); %>
+			<div class="meta">
+				<div class="author">Author: <%= post.author %></div>
+				<div class="date">Published: <%= moment(post.created).format('YYYY-MM-DD HH:mm') %></div>
 			</div>
+			<h1><%= post.headline %></h1>
+			<% if(post.image){ %>
+				<img src="/<%= post.image.replace(/\\/g,'/') %>" alt="<%= post.headline %>">
+				<br>
+				<br>
+			<% } %>
+			<%= post.body %>
 		</div>
 		<aside class="sidebar">
 			<div class="tags">
@@ -53,5 +49,6 @@
 	</div>
 </div>
 <script src="/js/script.js"></script>
+
 </body>
 </html>

@@ -1,0 +1,73 @@
+<!DOCTYPE HTML>
+<html lang="ru">
+<head>
+<title><%= title %></title>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="/stylesheets/style.css" type="text/css" media="screen, projection">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+</head>
+<body>
+
+<div class="all">
+	<div class="header">
+		<div class="logo"><a href="/">My Blog</a></div>
+		<div class="nav">
+			<ul>
+				<li><a href="/add/">Add post</a></li>
+				<li><a href="#">Stats</a></li>
+				<li><a href="#">Sign out</a></li>
+			</ul>
+		</div>
+	</div>
+	<form action="/add" method="post" id="add_post" enctype="multipart/form-data">
+		<div class="main">
+			<div class="content">
+				<h2>Add new post</h2>
+				<div class="form-item">
+					<label for="post_headline">Title</label>
+					<input type="text" class="form-text" name="headline" id="post_headline" required>
+				</div>
+				<div class="form-item">
+					<label for="post_body">Cotent</label>
+					<textarea name="body" id="post_body" cols="30" rows="10" required></textarea>
+				</div>
+				<div class="form-item">
+					<label for="post_tags">Tags</label>
+					<input type="text" class="form-text" name="tags" id="post_tags">
+					<div class="sub">Comma separated tags. Eg: sport, dev, my trip, web</div>
+				</div>
+			</div>
+			<aside class="sidebar">
+				<div class="form-item">
+					<label for="post_permalink">URL</label>
+					<input type="text" class="form-text" name="permalink" id="post_permalink" required>
+					<div class="sub" id="post_permalink_preview">http://localhost/post/hello-world</div>
+				</div>
+				<div class="form-item">
+					<label for="post_date">Date</label>
+					<input type="text" class="form-text" id="post_date" placeholder="YYYY-MM-DD HH:MM">
+					<input type="hidden" name="created" id="post_date_utc">
+				</div>
+				<div class="form-item">
+					<label for="post_image">Cover image</label>
+					<input type="file" name="image" id="post_image">
+				</div>
+			</aside>
+		</div>
+		<div class="foot-content">
+			<div class="form-action">
+				<button type="submit" class="button">Publish</button>
+			</div>
+		</div>
+	</form>
+	<div class="footer">
+		<div class="soc-icons">
+			<a href="#" class="fa fa-facebook-square" aria-hidden="true"></a>
+			<a href="#" class="fa fa-twitter-square" aria-hidden="true"></a>
+			<a href="#" class="fa fa-instagram" aria-hidden="true"></a>
+		</div>
+	</div>
+</div>
+<script src="/js/interface.js"></script>
+</body>
+</html>
