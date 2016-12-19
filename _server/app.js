@@ -8,6 +8,12 @@ var bodyParser = require('body-parser');
 var index = require('./routes/index');
 var articles = require('./routes/articles');
 
+var passport = require('passport');  
+var LocalStrategy = require('passport-local').Strategy;  
+var mongoose = require('mongoose');  
+var flash = require('connect-flash');  
+var session = require('express-session');
+
 var app = express();
 
 // view engine setup
@@ -25,8 +31,21 @@ app.use(cookieParser());
 app.use(require('less-middleware')(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(session({ secret: 'shhsecret' }));  
+app.use(passport.initialize());  
+app.use(passport.session());  
+app.use(flash());
+
+app.use(function(req, res, next) {
+  res.isuser = req.isAuthenticated() ? req.user.local.username : false;
+  next();
+});
+
+
 app.use('/', index);
 app.use('/article', articles);
+
+require('./passport')(passport);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

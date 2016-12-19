@@ -10,8 +10,13 @@ var moment = require('moment');
 router.get('/:id', function(req, res, next) {
 
 	ctrl.getPost(req.params.id, function(data){
-		console.log(data);
-		res.render('post', { title: data.headline, post: data, moment: moment });
+		if(req.query.action === 'delete' && data.author === res.isuser){
+			ctrl.deletePost(req.params.id, function(data){
+				res.redirect('/');
+			});
+		} else {
+			res.render('post', { title: data.headline, post: data, moment: moment, editor: res.isuser });
+		}
 	});
 
 });

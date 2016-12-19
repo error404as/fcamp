@@ -1,24 +1,5 @@
-<!DOCTYPE HTML>
-<html lang="ru">
-<head>
-<title><%= title %></title>
-<meta charset="UTF-8">
-<link rel="stylesheet" href="/stylesheets/style.css" type="text/css" media="screen, projection">
-<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
-</head>
-<body>
+<% include partials/head %> 
 
-<div class="all">
-	<div class="header">
-		<div class="logo"><a href="/">My Blog</a></div>
-		<div class="nav">
-			<ul>
-				<li><a href="/add/">Add post</a></li>
-				<li><a href="#">Stats</a></li>
-				<li><a href="#">Sign out</a></li>
-			</ul>
-		</div>
-	</div>
 	<div class="main">
 		<div class="content">
 			<div class="posts-list">
@@ -26,7 +7,7 @@
 					<div class="post-item <% if(!post.image){ %>no-image<% } %>">
 						<a href="/article/<%= post.permalink %>">
 							<% if(post.image){ %>
-							<div class="vis"><img src="/<%= post.image.replace(/\\/g,'/') %>" alt="<%= post.headline %>"></div>
+							<div class="vis"><img src="<%= post.image.replace(/\\/g,'/') %>" alt="<%= post.headline %>"></div>
 							<% } %>
 							<div class="info">
 								<div class="headline"><%= post.headline %></div>
@@ -44,14 +25,8 @@
 			</div>
 		</aside>
 	</div>
-	<div class="footer">
-		<div class="soc-icons">
-			<a href="#" class="fa fa-facebook-square" aria-hidden="true"></a>
-			<a href="#" class="fa fa-twitter-square" aria-hidden="true"></a>
-			<a href="#" class="fa fa-instagram" aria-hidden="true"></a>
-		</div>
-	</div>
-</div>
-<script src="/js/script.js"></script>
-</body>
-</html>
+
+<% include partials/foot %> 
+
+
+

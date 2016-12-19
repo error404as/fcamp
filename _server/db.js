@@ -12,14 +12,16 @@ var BlogPost = mongoose.model('BlogPost', postSchema);
 
 
 module.exports = {
-	addPost: function(data){
+	addPost: function(data,fn){
 		//console.log(data)
 		new BlogPost(data).save(function (err) {
 			if(err){
 				console.log('error on saving: '+data.permalink);
-				//console.log(err);
 			} else {
 				console.log('saved: '+data.permalink);
+			}
+			if(typeof fn === 'function'){
+				fn({result: !err});
 			}
 		});	
 	},
@@ -34,6 +36,11 @@ module.exports = {
 			fn(data)
 		});
 
+	},
+	deleteByPermalink: function(id,fn){
+		BlogPost.remove({permalink: id}).exec(function(err){
+			fn();
+		});
 	},
 	getByTag: function(id,fn){
 		BlogPost.find({tags: id}).sort({created: -1}).exec(function(err, data){

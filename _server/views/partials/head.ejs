@@ -1,0 +1,25 @@
+<!DOCTYPE HTML>
+<html lang="ru">
+<head>
+<title><% if(typeof title !== 'undefined'){ %><%= title %><% } %></title>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="/stylesheets/font-awesome.min.css" type="text/css" media="screen, projection">
+<link rel="stylesheet" href="/stylesheets/style.css" type="text/css" media="screen, projection">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+</head>
+<body>
+<div class="all">
+	<div class="header">
+		<div class="logo"><a href="/">My Blog</a></div>
+		<div class="nav">
+			<ul>
+				<% if(typeof editor !== 'undefined' && editor){ %>
+					<li>Hello, <%= editor %>!</li>
+					<li><a href="/add">Add post</a></li>
+					<li><a href="/logout">Sign out</a></li>
+				<% } else { %>
+					<li><a href="/login">Login</a></li>
+				<% } %>
+			</ul>
+		</div>
+	</div>
