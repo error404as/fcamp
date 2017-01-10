@@ -1,0 +1,55 @@
+{
+  "name": "front-camp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./bin/www",
+    "build-dev": "webpack --config webpack.dev.js --watch",
+    "build-prod": "webpack --config webpack.prod.js",
+    "dev-server": "webpack-dev-server --config webpack.dev.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/error404as/fcamp.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/error404as/fcamp/issues"
+  },
+  "homepage": "https://github.com/error404as/fcamp#readme",
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "~1.15.2",
+    "connect-flash": "^0.1.1",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.2.0",
+    "ejs": "~2.5.2",
+    "express": "~4.14.0",
+    "express-session": "^1.14.2",
+    "formidable": "^1.0.17",
+    "less-middleware": "~2.2.0",
+    "moment": "^2.17.1",
+    "mongoose": "^4.7.3",
+    "morgan": "~1.7.0",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
+    "serve-favicon": "~2.3.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-loader": "^6.2.8",
+    "babel-preset-latest": "^6.16.0",
+    "clean-webpack-plugin": "^0.1.14",
+    "css-loader": "^0.26.0",
+    "es6-promise": "^4.0.5",
+    "file-loader": "^0.9.0",
+    "json-loader": "^0.5.4",
+    "less-loader": "^2.2.3",
+    "style-loader": "^0.13.1",
+    "url-loader": "^0.5.7",
+    "webpack": "^1.13.3",
+    "whatwg-fetch": "^2.0.1"
+  }
+}

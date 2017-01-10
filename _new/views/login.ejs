@@ -1,0 +1,26 @@
+<% include partials/head %> 
+
+	<div class="main">
+
+		<form action="" method="post">
+			<h2>Login</h2>
+			<% if (message != null) { %>
+				<div><%= message %></div>
+				<br>
+			<% } %>
+			<div class="form-item">
+				<label>Username</label>
+				<input type="text" class="form-text" name="username">
+			</div>
+			<div class="form-item">
+				<label>Password</label>
+				<input type="password" class="form-text" name="password" />
+			</div>
+			<div class="form-action">
+				<button type="submit" class="button">Submit</button> or <a href="/signup">Sign Up</a>
+			</div>
+		</form>
+
+	</div>
+
+<% include partials/foot %> 

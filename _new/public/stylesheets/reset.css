@@ -1,0 +1,75 @@
+html, body, h1, h2, h3, h4, h5, h6, p, em, strong, abbr, acronym, blockquote, q, cite, ins, del, dfn, a, div, span, pre, hr, address, br, b, i, sub, sup, big, small, tt, table, tr, caption, thead, tbody, tfoot, col, colgroup, form, input, label, textarea, button, fieldset, legend, select, option, optiongroup, ul, ol, li, dl, dt, dd, code, var, kdb, samp, img, object, param, map, area, bdo, iframe {padding:0; margin:0;}
+article, aside, figure, footer, header, nav, section, hgroup {display:block;}
+html,body {min-height:100%;}
+body {
+	background:#fff;
+	font: 16px/1.67 "Helvetica Neue", Helvetica, Arial, sans-serif; color: #4a4a4a;
+}
+html{-ms-text-size-adjust: 100%; -webkit-text-size-adjust:100%;}
+body {
+	text-rendering: auto;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+body.touch {cursor: pointer; -webkit-tap-highlight-color: rgba(0,0,0,0);}
+a {color: #c14550; text-decoration: underline; cursor: pointer; outline: none;}
+a:hover {text-decoration: none;}
+fieldset {border:0;}
+h1 {font-size:42px;}
+h2 {font-size:38px;}
+h3 {font-size:20px;}
+h4 {font-size:19px;}
+h5 {font-size:16px;}
+h1, h2, h3, h4, h5 {line-height:1.2; font-weight: normal;}
+li {margin-left:25px;}
+hr {clear: both; height: 1px; margin: 22px 0 25px; overflow: hidden; background: #4a4a4a; border: 0;}
+img {border:0; max-width: 100%; max-height: 100%;}
+strong {font-weight: bold;}
+input {vertical-align:middle;}
+button,
+input.btn,
+input[type=button],
+input[type=submit],
+input[type=reset] {cursor:pointer; overflow:visible; font-family: Arial, sans-serif; outline-color: #dd9e9f;}
+input[type=text],
+input[type=password],
+input[type=date],
+input[type=tel],
+input[type=email],
+input[type=number],
+input.form-input {
+	padding:8px 10px;
+	background:#fff;
+	border: 1px solid #d9d9d9;
+	font: 16px/1.2 Arial, sans-serif; color:#4a4a4a;
+	outline:none; box-sizing: border-box;
+}
+textarea {
+	padding:6px 12px;
+	background:#fff;
+	border: 1px solid #d9d9d9;
+	font:16px/1.2 Arial, sans-serif; color:#4a4a4a;
+	outline:none; box-sizing: border-box;
+}
+select {
+	height: 35px;
+	vertical-align:middle;
+	padding:2px 5px;
+	background:#fff;
+	border: 1px solid #e1e1e0;
+	font:16px/32px Arial, sans-serif; color:#4a4a4a;
+	box-sizing: border-box;
+}
+input[type=text],
+input[type=password],
+input[type=date],
+input[type=tel],
+input[type=button],
+input[type=submit],
+input[type=reset],
+button,
+textarea {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	border-radius: 0;
+}
