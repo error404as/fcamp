@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
 var articles = require('./routes/articles');
+var apis = require('./routes/api');
 
 var passport = require('passport');  
 var LocalStrategy = require('passport-local').Strategy;  
@@ -43,6 +44,7 @@ app.use(function(req, res, next) {
 
 
 app.use('/', index);
+app.use('/api', apis);
 app.use('/article', articles);
 
 require('./passport')(passport);
