@@ -1,31 +1,6 @@
 <% include partials/head %> 
 
-	<div class="main">
-		<div class="content">
-			<div id="app"></div>
-			<!--div class="posts-list">
-				<% posts.forEach(function(post){ %>
-					<div class="post-item <% if(!post.image){ %>no-image<% } %>">
-						<a href="/article/<%= post.permalink %>">
-							<% if(post.image){ %>
-							<div class="vis"><img src="<%= post.image.replace(/\\/g,'/') %>" alt="<%= post.headline %>"></div>
-							<% } %>
-							<div class="info">
-								<div class="headline"><%= post.headline %></div>
-								<% if(post.created){ %><div class="meta"><%= moment(post.created).format('YYYY-MM-DD') %></div><% } %>
-							</div>
-						</a>
-					</div>
-				<% }); %>
-			</div-->
-		</div>
-		<aside class="sidebar">
-			<div class="tags">
-				<h3>Tags</h3>
-				<div class="js-tags"></div>
-			</div>
-		</aside>
-	</div>
+	<div id="app"></div>
 
 <% include partials/foot %> 
 

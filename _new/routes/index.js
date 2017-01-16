@@ -11,9 +11,21 @@ var formi = require('formidable');
 
 
 router.get('/', function(req, res, next) {
-	ctrl.get(function(data){
-		res.render('index', { title: 'Blog Home', posts: data, moment: moment, editor: res.isuser });
-	})
+	res.render('index', { title: 'Blog Home', editor: res.isuser });
+});
+
+router.get('/article/:id', function(req, res, next) {
+	if(req.query.action === 'delete' && res.isuser === 'admin'){
+		ctrl.deletePost(req.params.id, function(data){
+			res.redirect('/');
+		});
+	} else {
+		res.render('index', { title: 'Blog', editor: res.isuser });
+	}
+});
+
+router.get('/tag/:id', function(req, res, next) {
+	res.render('index', { title: req.params.id, editor: res.isuser });
 });
 
 router.get('/add', isLoggedIn, function(req, res, next) {
@@ -58,19 +70,6 @@ router.post('/add-news', isLoggedIn, function(req, res, next) {
 		}
 	});   
 });
-
-router.get('/tags', function(req, res, next) {
-	ctrl.getTags(function(data){
-		res.json(data);
-	});
-});
-
-router.get('/tag/:id', function(req, res, next) {
-	ctrl.getPostsByTags(req.params.id, function(data){
-		res.render('index', { title: req.params.id, posts: data, moment: moment, editor: res.isuser });
-	});
-});
-
 
 router.get('/login', isLoggedOut, function(req, res, next) {  
   res.render('login.ejs', { title: 'Login', message: req.flash('loginMessage'), editor: res.isuser });

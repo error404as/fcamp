@@ -1,10 +1,12 @@
 import React from 'react';
 import moment from 'moment';
+import { Link } from 'react-router';
 
 var Article = React.createClass({
   render() {
     return (
       <div>
+        <Link to="/">&lt; Back Home</Link>
         <div className="meta">
           <div className="author">Author: {this.props.post.author}</div>
           <div className="date">Published: {moment(this.props.post.created).format('YYYY-MM-DD HH:mm')}</div>

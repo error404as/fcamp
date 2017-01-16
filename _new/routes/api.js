@@ -22,13 +22,13 @@ router.get('/post/:id', function(req, res, next) {
 
 });
 
-router.get('/post/tags', function(req, res, next) {
+router.get('/tags', function(req, res, next) {
 	ctrl.getTags(function(data){
 		res.json(data);
 	});
 });
 
-router.get('/post/tag/:id', function(req, res, next) {
+router.get('/tag/:id', function(req, res, next) {
 	ctrl.getPostsByTags(req.params.id, function(data){
 		res.json(data);
 	});
