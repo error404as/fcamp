@@ -8,7 +8,7 @@ var TagsList = React.createClass({
         <h3>Tags</h3>
         <ul>
           {this.props.tags.map((tag)=>{
-            return <li key={tag._id}><Link to={`/tag/${tag._id}`}>{tag._id}</Link></li>
+            return <li key={tag._id}><Link to={`/tag/${tag._id}`} activeClassName="selected">{tag._id}</Link></li>
           })}
         </ul>
       </div>
