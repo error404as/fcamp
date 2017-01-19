@@ -9,13 +9,13 @@ export default {
   onArticle(next){
     store.dispatch({
       type: 'GET_POST',
-      postId: next.params.postId
+      value: next.params.postId
     });
   },
   onTag(next){
     store.dispatch({
       type: 'GET_TAG',
-      tagId: next.params.tagId
+      value: next.params.tagId
     });
   },
   getTags(){

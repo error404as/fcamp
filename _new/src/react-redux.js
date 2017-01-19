@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import store from './redux';
-import App from './components/App.jsx';
-import Article from './components/Article.jsx';
+import App from './components/App.js';
+import Article from './components/Article.js';
 import actions from './router-actions';
 import { render } from 'react-dom';
 import { Router, Route, Link, browserHistory, IndexRoute } from 'react-router';

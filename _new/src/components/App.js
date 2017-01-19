@@ -1,9 +1,9 @@
 import React from 'react';
 import store from '../redux';
-import Article from './Article.jsx';
-import PostItem from './PostItem.jsx';
-import TagsList from './TagsList.jsx';
-import Loader from './Loader.jsx';
+import Article from './Article';
+import PostItem from './PostItem';
+import TagsList from './TagsList';
+import Loader from './Loader';
 
 var App = React.createClass({
   getInitialState() {
