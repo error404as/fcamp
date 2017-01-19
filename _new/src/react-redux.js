@@ -1,18 +1,15 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import store from './redux';
 import App from './components/App.js';
 import Article from './components/Article.js';
 import actions from './router-actions';
 import { render } from 'react-dom';
 import { Router, Route, Link, browserHistory, IndexRoute } from 'react-router';
 
+// custom handler :)
 document.querySelector('.logo a').addEventListener('click',function(e){
   e.preventDefault();
   browserHistory.push('/');
 }, true);
-
-actions.getTags();
 
 render((
   <Router history={browserHistory}>

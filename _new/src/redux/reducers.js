@@ -37,11 +37,9 @@ var type = (state='', action) => {
 var posts = (state=[], action) => {
   switch (action.type) {
     case 'GET_POSTS':
-      return [];
-    case 'GET_POSTS_Result':
-      return action.value;
     case 'GET_TAG':
       return [];
+    case 'GET_POSTS_Result':
     case 'GET_TAG_Result':
       return action.value;
     default:
@@ -66,7 +64,6 @@ var tags = (state=[], action) => {
 var pageId = (state='', action) => {
   switch (action.type) {
     case 'GET_POST':
-      return action.value;
     case 'GET_TAG':
       return action.value;
     default:

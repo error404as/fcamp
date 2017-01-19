@@ -17,10 +17,5 @@ export default {
       type: 'GET_TAG',
       value: next.params.tagId
     });
-  },
-  getTags(){
-    store.dispatch({
-      type: 'GET_TAGS'
-    });
-  },
+  }
 };

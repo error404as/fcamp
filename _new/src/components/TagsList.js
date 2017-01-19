@@ -1,7 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router';
+import store from '../redux';
 
 var TagsList = React.createClass({
+  componentDidMount() {
+    store.dispatch({ type: 'GET_TAGS' });
+  },
   render() {
     return (
       <div className="tags">
