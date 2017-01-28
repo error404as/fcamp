@@ -37,7 +37,7 @@ app.use(passport.session());
 app.use(flash());
 
 app.use(function(req, res, next) {
-  res.isuser = req.isAuthenticated() ? req.user.local.username : false;
+  res.isuser = 'admin'; //req.isAuthenticated() ? req.user.local.username : false;
   next();
 });
 

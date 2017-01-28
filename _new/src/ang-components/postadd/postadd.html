@@ -1,0 +1,42 @@
+<form action="/add" method="post" id="add_post" name="add_post" enctype="multipart/form-data" ng-submit="model.formCheck($event, add_post)" novalidate>
+	<div class="main">
+		<div class="content">
+			<h2>Add new post</h2>
+			<div class="form-item">
+				<label for="post_headline">Title</label>
+				<input type="text" class="form-text" name="headline" id="post_headline" ng-model="headline" my-check-valids ng-required="true" autocomplete="off" />
+				{{add_post.headline.$error}}
+			</div>
+			<div class="form-item">
+				<label for="post_body">Content</label>
+				<textarea name="body" id="post_body" cols="30" rows="10"></textarea>
+			</div>
+			<div class="form-item">
+				<label for="post_tags">Tags</label>
+				<input type="text" class="form-text" name="tags" id="post_tags">
+				<div class="sub">Comma separated tags. Eg: sport, dev, my trip, web</div>
+			</div>
+		</div>
+		<aside class="sidebar">
+			<div class="form-item">
+				<label for="post_permalink">URL</label>
+				<input type="text" class="form-text" name="permalink" id="post_permalink" >
+				<div class="sub" id="post_permalink_preview">http://localhost/post/hello-world</div>
+			</div>
+			<div class="form-item">
+				<label for="post_date">Date</label>
+				<input type="text" class="form-text" id="post_date" placeholder="YYYY-MM-DD HH:MM">
+				<input type="hidden" name="created" id="post_date_utc">
+			</div>
+			<div class="form-item">
+				<label for="post_image">Cover image</label>
+				<input type="file" name="image" id="post_image">
+			</div>
+		</aside>
+	</div>
+	<div class="foot-content">
+		<div class="form-action">
+			<button type="submit" class="button">Publish</button>
+		</div>
+	</div>
+</form>
