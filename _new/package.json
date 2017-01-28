@@ -18,6 +18,9 @@
   },
   "homepage": "https://github.com/error404as/fcamp#readme",
   "dependencies": {
+    "angular": "^1.6.1",
+    "angular-route": "^1.6.1",
+    "angular-ui-router": "^0.4.2",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "~1.15.2",
     "connect-flash": "^0.1.1",
@@ -50,6 +53,7 @@
     "css-loader": "^0.26.0",
     "es6-promise": "^4.0.5",
     "file-loader": "^0.9.0",
+    "html-webpack-plugin": "^2.26.0",
     "json-loader": "^0.5.4",
     "less-loader": "^2.2.3",
     "style-loader": "^0.13.1",
