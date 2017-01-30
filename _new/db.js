@@ -29,13 +29,16 @@ module.exports = {
 		BlogPost.find().sort({created: -1}).exec(function(err, data){
 			fn(data)
 		});
-
+	},
+	getSome: function(limit, skip, fn){
+		BlogPost.find().sort({created: -1}).skip(skip).limit(limit).exec(function(err, data){
+			fn(data)
+		});
 	},
 	getByPermalink: function(id,fn){
 		BlogPost.findOne({permalink: id}).exec(function(err, data){
 			fn(data)
 		});
-
 	},
 	deleteByPermalink: function(id,fn){
 		BlogPost.remove({permalink: id}).exec(function(err){
@@ -46,14 +49,12 @@ module.exports = {
 		BlogPost.find({tags: id}).sort({created: -1}).exec(function(err, data){
 			fn(data)
 		});
-
 	},
 	getTags: function(fn){
 		BlogPost.aggregate([
 			{$unwind: '$tags'},
 			{$group: {_id:'$tags', sum: {$sum:1} }}
 		]).exec(function(err, tags){  fn(tags) });
-
 	}
 };
 

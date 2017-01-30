@@ -1,32 +1,43 @@
 <form action="/add" method="post" id="add_post" name="add_post" enctype="multipart/form-data" ng-submit="model.formCheck($event, add_post)" novalidate>
 	<div class="main">
 		<div class="content">
-			<h2>Add new post</h2>
+			<h2>{{model.editing ? 'Edit post' : 'Add new post'}}</h2>
 			<div class="form-item">
 				<label for="post_headline">Title</label>
-				<input type="text" class="form-text" name="headline" id="post_headline" ng-model="headline" my-check-valids ng-required="true" autocomplete="off" />
-				{{add_post.headline.$error}}
+				<input type="text" class="form-text" name="headline" id="post_headline" autocomplete="off"
+					ng-model="model.post.headline"
+					ng-required="true"
+					ng-class="{error: add_post.headline.$dirty && !add_post.headline.$valid}"
+					/>
+				<div class="error-msg" ng-show="add_post.headline.$dirty && add_post.headline.$error.required">This field can't be empty</div>
 			</div>
 			<div class="form-item">
 				<label for="post_body">Content</label>
-				<textarea name="body" id="post_body" cols="30" rows="10"></textarea>
+				<textarea name="body" id="post_body" cols="30" rows="10"
+					ng-model="model.post.body"
+					check-minlen
+					ng-required="true"
+					ng-class="{error: add_post.body.$dirty && !add_post.body.$valid}"
+					></textarea>
+				<div class="error-msg" ng-show="add_post.body.$dirty && add_post.body.$error.required">This field can't be empty</div>
+				<div class="error-msg" ng-show="add_post.body.$dirty && !add_post.body.$error.required && add_post.body.$error.milen">Article requires some more text...</div>
 			</div>
 			<div class="form-item">
 				<label for="post_tags">Tags</label>
-				<input type="text" class="form-text" name="tags" id="post_tags">
+				<input type="text" class="form-text" name="tags" id="post_tags" ng-model="model.post.tags">
 				<div class="sub">Comma separated tags. Eg: sport, dev, my trip, web</div>
 			</div>
 		</div>
 		<aside class="sidebar">
 			<div class="form-item">
 				<label for="post_permalink">URL</label>
-				<input type="text" class="form-text" name="permalink" id="post_permalink" >
-				<div class="sub" id="post_permalink_preview">http://localhost/post/hello-world</div>
+				<input type="text" class="form-text" name="permalink" id="post_permalink" ng-model="model.post.permalink" ng-change="model.formatUrl()" autocomplete="off">
+				<div class="sub" id="post_permalink_preview">{{model.permalinkView}}</div>
 			</div>
 			<div class="form-item">
 				<label for="post_date">Date</label>
-				<input type="text" class="form-text" id="post_date" placeholder="YYYY-MM-DD HH:MM">
-				<input type="hidden" name="created" id="post_date_utc">
+				<input type="text" class="form-text" id="post_date" placeholder="YYYY-MM-DD HH:MM" ng-model="model.createdView" ng-change="model.formatDate()" autocomplete="off">
+				<input type="hidden" name="created" id="post_date_utc" ng-model="model.post.created">
 			</div>
 			<div class="form-item">
 				<label for="post_image">Cover image</label>

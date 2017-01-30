@@ -34312,6 +34312,8 @@
 			template: '<post-list></post-list>'
 		}).when('/add', {
 			template: '<post-add></post-add>'
+		}).when('/edit/:id', {
+			template: '<post-add></post-add>'
 		}).otherwise({ redirectTo: '/' });
 
 		$locationProvider.hashPrefix('');
@@ -34327,7 +34329,7 @@
 	  value: true
 	});
 	var AppComponent = exports.AppComponent = {
-	  template: "\n    <h1>Hello world</h1>\n    <a href=\"#/\" class=\"button\">Posts list</a>\n    <a href=\"#/add\" class=\"button\">Add post</a>\n    <ng-view></ng-view>\n  "
+	  template: "\n  \t<div class=\"cms-content\">\n\t    <a href=\"#/\" class=\"button\">Posts list</a>\n\t    <a href=\"#/add\" class=\"button\">Add post</a>\n\t    <ng-view></ng-view>\n    </div>\n  "
 	};
 
 /***/ },
@@ -34374,9 +34376,13 @@
 
 	var _input2 = _interopRequireDefault(_input);
 
+	var _app = __webpack_require__(15);
+
+	var _app2 = _interopRequireDefault(_app);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var PostAdd = exports.PostAdd = _angular2.default.module('postadd', []).directive('postAdd', _postadd.PostAddDirective).directive('myCheckValids', _input2.default).name;
+	var PostAdd = exports.PostAdd = _angular2.default.module('postadd', [_app2.default]).directive('postAdd', _postadd.PostAddDirective).directive('checkMinlen', _input2.default).name;
 
 /***/ },
 /* 9 */
@@ -34387,21 +34393,93 @@
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
+	function formatURL(id) {
+		var result = window.location.host || '';
+		if (result) {
+			result = window.location.protocol + '//' + result;
+		}
+		result += '/article/' + id;
+		return result;
+	}
+	function setViewDate(d) {
+		var date = new Date(d);
+		var offset = date.getTimezoneOffset() * 60 * 1000;
+		var string = new Date(date - offset).toISOString();
+		var stringDate = string.substring(0, string.lastIndexOf(':')).replace('T', ' ');
+		return stringDate;
+	}
+	function setDate(val) {
+		val = val.trim();
+		if (val.indexOf(':') === -1) {
+			val += ' 00:00';
+		}
+
+		if (new Date('2016-12-15T17:08').toISOString().indexOf('2016-12-15T17:08') !== 0) {
+			// I know, this is IE ;)
+			val = val.replace(' ', 'T');
+		}
+
+		return new Date(val).toISOString();
+	}
+
 	var PostAddDirective = exports.PostAddDirective = function PostAddDirective() {
 		return {
 			restrict: 'E',
 			template: __webpack_require__(10),
-			controller: ['$http', function ($http) {
+			controller: ['$http', '$routeParams', 'fetcher', function ($http, $routeParams, fetcher) {
 				var model = this;
+				var date = new Date();
 
-				model.headline = '';
-				model.post = {};
+				model.editing = $routeParams.id || '';
+				model.post = {
+					headline: '',
+					body: '',
+					tags: '',
+					permalink: '',
+					created: date.toISOString(),
+					image: ''
+				};
+				model.permalinkView = '';
+
+				model.createdView = setViewDate(date);
+
+				model.formatUrl = function () {
+					model.permalinkView = formatURL(model.post.permalink);
+				};
+				model.formatDate = function () {
+					model.created = setDate(model.createdView);
+				};
+
+				if ($routeParams.id) {
+
+					fetcher.getPost($routeParams.id).then(function (data) {
+						console.log(data);
+
+						model.post = data;
+						model.formatUrl();
+						model.createdView = setViewDate(model.post.created);
+					});
+				}
+
 				model.formCheck = function (e, f) {
 					e.preventDefault();
-					console.log('----------');
-					console.log(f);
-					console.log(f.headline.$error);
-					//return false
+					if (f.$valid) {
+						console.log(model.post);
+
+						$http.post('/add/', model.post).then(function () {
+							console.log('done');
+						}, function (data, status) {
+							console.log('error');
+							console.log(data);
+							console.log(status);
+						});
+					} else {
+						for (var er in f.$error) {
+							f.$error[er].forEach(function (itm) {
+								return itm.$setDirty();
+							});
+						}
+					}
 				};
 			}],
 			controllerAs: 'model'
@@ -34414,7 +34492,7 @@
 /* 10 */
 /***/ function(module, exports) {
 
-	module.exports = "<form action=\"/add\" method=\"post\" id=\"add_post\" name=\"add_post\" enctype=\"multipart/form-data\" ng-submit=\"model.formCheck($event, add_post)\" novalidate>\r\n\t<div class=\"main\">\r\n\t\t<div class=\"content\">\r\n\t\t\t<h2>Add new post</h2>\r\n\t\t\t<div class=\"form-item\">\r\n\t\t\t\t<label for=\"post_headline\">Title</label>\r\n\t\t\t\t<input type=\"text\" class=\"form-text\" name=\"headline\" id=\"post_headline\" ng-model=\"headline\" my-check-valids ng-required=\"true\" autocomplete=\"off\" />\r\n\t\t\t\t{{add_post.headline.$error}}\r\n\t\t\t</div>\r\n\t\t\t<div class=\"form-item\">\r\n\t\t\t\t<label for=\"post_body\">Content</label>\r\n\t\t\t\t<textarea name=\"body\" id=\"post_body\" cols=\"30\" rows=\"10\"></textarea>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"form-item\">\r\n\t\t\t\t<label for=\"post_tags\">Tags</label>\r\n\t\t\t\t<input type=\"text\" class=\"form-text\" name=\"tags\" id=\"post_tags\">\r\n\t\t\t\t<div class=\"sub\">Comma separated tags. Eg: sport, dev, my trip, web</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t<aside class=\"sidebar\">\r\n\t\t\t<div class=\"form-item\">\r\n\t\t\t\t<label for=\"post_permalink\">URL</label>\r\n\t\t\t\t<input type=\"text\" class=\"form-text\" name=\"permalink\" id=\"post_permalink\" >\r\n\t\t\t\t<div class=\"sub\" id=\"post_permalink_preview\">http://localhost/post/hello-world</div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"form-item\">\r\n\t\t\t\t<label for=\"post_date\">Date</label>\r\n\t\t\t\t<input type=\"text\" class=\"form-text\" id=\"post_date\" placeholder=\"YYYY-MM-DD HH:MM\">\r\n\t\t\t\t<input type=\"hidden\" name=\"created\" id=\"post_date_utc\">\r\n\t\t\t</div>\r\n\t\t\t<div class=\"form-item\">\r\n\t\t\t\t<label for=\"post_image\">Cover image</label>\r\n\t\t\t\t<input type=\"file\" name=\"image\" id=\"post_image\">\r\n\t\t\t</div>\r\n\t\t</aside>\r\n\t</div>\r\n\t<div class=\"foot-content\">\r\n\t\t<div class=\"form-action\">\r\n\t\t\t<button type=\"submit\" class=\"button\">Publish</button>\r\n\t\t</div>\r\n\t</div>\r\n</form>\r\n"
+	module.exports = "<form action=\"/add\" method=\"post\" id=\"add_post\" name=\"add_post\" enctype=\"multipart/form-data\" ng-submit=\"model.formCheck($event, add_post)\" novalidate>\r\n\t<div class=\"main\">\r\n\t\t<div class=\"content\">\r\n\t\t\t<h2>{{model.editing ? 'Edit post' : 'Add new post'}}</h2>\r\n\t\t\t<div class=\"form-item\">\r\n\t\t\t\t<label for=\"post_headline\">Title</label>\r\n\t\t\t\t<input type=\"text\" class=\"form-text\" name=\"headline\" id=\"post_headline\" autocomplete=\"off\"\r\n\t\t\t\t\tng-model=\"model.post.headline\"\r\n\t\t\t\t\tng-required=\"true\"\r\n\t\t\t\t\tng-class=\"{error: add_post.headline.$dirty && !add_post.headline.$valid}\"\r\n\t\t\t\t\t/>\r\n\t\t\t\t<div class=\"error-msg\" ng-show=\"add_post.headline.$dirty && add_post.headline.$error.required\">This field can't be empty</div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"form-item\">\r\n\t\t\t\t<label for=\"post_body\">Content</label>\r\n\t\t\t\t<textarea name=\"body\" id=\"post_body\" cols=\"30\" rows=\"10\"\r\n\t\t\t\t\tng-model=\"model.post.body\"\r\n\t\t\t\t\tcheck-minlen\r\n\t\t\t\t\tng-required=\"true\"\r\n\t\t\t\t\tng-class=\"{error: add_post.body.$dirty && !add_post.body.$valid}\"\r\n\t\t\t\t\t></textarea>\r\n\t\t\t\t<div class=\"error-msg\" ng-show=\"add_post.body.$dirty && add_post.body.$error.required\">This field can't be empty</div>\r\n\t\t\t\t<div class=\"error-msg\" ng-show=\"add_post.body.$dirty && !add_post.body.$error.required && add_post.body.$error.milen\">Article requires some more text...</div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"form-item\">\r\n\t\t\t\t<label for=\"post_tags\">Tags</label>\r\n\t\t\t\t<input type=\"text\" class=\"form-text\" name=\"tags\" id=\"post_tags\" ng-model=\"model.post.tags\">\r\n\t\t\t\t<div class=\"sub\">Comma separated tags. Eg: sport, dev, my trip, web</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t<aside class=\"sidebar\">\r\n\t\t\t<div class=\"form-item\">\r\n\t\t\t\t<label for=\"post_permalink\">URL</label>\r\n\t\t\t\t<input type=\"text\" class=\"form-text\" name=\"permalink\" id=\"post_permalink\" ng-model=\"model.post.permalink\" ng-change=\"model.formatUrl()\" autocomplete=\"off\">\r\n\t\t\t\t<div class=\"sub\" id=\"post_permalink_preview\">{{model.permalinkView}}</div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"form-item\">\r\n\t\t\t\t<label for=\"post_date\">Date</label>\r\n\t\t\t\t<input type=\"text\" class=\"form-text\" id=\"post_date\" placeholder=\"YYYY-MM-DD HH:MM\" ng-model=\"model.createdView\" ng-change=\"model.formatDate()\" autocomplete=\"off\">\r\n\t\t\t\t<input type=\"hidden\" name=\"created\" id=\"post_date_utc\" ng-model=\"model.post.created\">\r\n\t\t\t</div>\r\n\t\t\t<div class=\"form-item\">\r\n\t\t\t\t<label for=\"post_image\">Cover image</label>\r\n\t\t\t\t<input type=\"file\" name=\"image\" id=\"post_image\">\r\n\t\t\t</div>\r\n\t\t</aside>\r\n\t</div>\r\n\t<div class=\"foot-content\">\r\n\t\t<div class=\"form-action\">\r\n\t\t\t<button type=\"submit\" class=\"button\">Publish</button>\r\n\t\t</div>\r\n\t</div>\r\n</form>\r\n"
 
 /***/ },
 /* 11 */
@@ -34498,12 +34576,32 @@
 		var model = this;
 
 		model.posts = [];
+		model.pager = [];
+		model.loading = false;
 
 		model.$onInit = function () {
-			fetcher.getPosts().then(function (data) {
-				model.posts = data;
+			model.setPage(1);
+		};
+
+		model.setPage = function (n) {
+			model.loading = true;
+			fetcher.getPosts(n).then(function (data) {
+				model.posts = data.items;
+				model.loading = false;
+				model.pager = pageBuilder(data.page, Math.ceil(data.total / data.perpage));
 			});
 		};
+	}
+
+	function pageBuilder(active, total) {
+		var result = [];
+		for (var i = 1; i <= total; i++) {
+			result.push({
+				page: i,
+				isActive: i === active
+			});
+		}
+		return result;
 	}
 
 	exports.default = {
@@ -34512,14 +34610,11 @@
 		controllerAs: 'model'
 	};
 
-	/*
-	*/
-
 /***/ },
 /* 14 */
 /***/ function(module, exports) {
 
-	module.exports = "<h1>Blog Posts {{model.posts.length}}</h1>\r\n<ul>\r\n\t<li ng-repeat=\"post in model.posts\"><a href=\"/article/{{post.permalink}}\">{{post.headline}}</a></li>\r\n</ul>\r\n\r\n"
+	module.exports = "<h1>Blog Posts</h1>\r\n<div class=\"loader-wrap\" ng-show=\"model.loading\">\r\n\t<div class=\"loader\"></div>\r\n</div>\r\n<div ng-hide=\"model.loading\">\r\n\t<table class=\"table\">\r\n\t\t<tr ng-repeat=\"post in model.posts\">\r\n\t\t\t<td class=\"wide\"><a href=\"/article/{{post.permalink}}\">{{post.headline}}</a></td>\r\n\t\t\t<td><a href=\"#/edit/{{post.permalink}}\">edit</a></td>\r\n\t\t\t<td><a href=\"#/delete/{{post.permalink}}\">delete</a></td>\r\n\t\t</tr>\r\n\t</table>\r\n\t<div class=\"pager\">Pager:\r\n\t\t<span class=\"page\" ng-class=\"{active: page.isActive}\" ng-repeat=\"page in model.pager\" ng-click=\"model.setPage(page.page)\">{{page.page}}</span>\r\n\t</div>\r\n</div>\r\n\r\n"
 
 /***/ },
 /* 15 */
@@ -34542,11 +34637,17 @@
 
 	function fetcher($http) {
 	    return {
-	        getPosts: getPosts
+	        getPosts: getPosts,
+	        getPost: getPost
 	    };
 
-	    function getPosts() {
-	        return $http.get('/api/posts').then(function (resp) {
+	    function getPosts(page) {
+	        return $http.get('/api/posts/' + page).then(function (resp) {
+	            return resp.data;
+	        });
+	    }
+	    function getPost(id) {
+	        return $http.get('/api/post/' + id).then(function (resp) {
 	            return resp.data;
 	        });
 	    }

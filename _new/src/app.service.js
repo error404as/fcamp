@@ -6,10 +6,14 @@ export default angular.module('services', [])
 
 function fetcher($http){
     return {
-        getPosts: getPosts
+        getPosts: getPosts,
+        getPost: getPost
     };
 
-	function getPosts(){
-		return $http.get('/api/posts').then(resp => resp.data);
+	function getPosts(page){
+		return $http.get('/api/posts/'+page).then(resp => resp.data);
+	}
+	function getPost(id){
+		return $http.get('/api/post/'+id).then(resp => resp.data);
 	}
 }

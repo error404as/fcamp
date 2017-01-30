@@ -43,7 +43,7 @@ router.post('/add', isLoggedIn, function(req, res, next) {
 	infile.keepExtensions = true;
 	infile.parse(req, function(err, fields, files){
 		fields.image = '';
-		if(files.image.size){
+		if(files && files.image && files.image.size){
 			console.log(files.image.path)
 			var imgpath = files.image.path.replace(/\\/g,'/');
 			fields.image = files.image.path.substring(imgpath.indexOf('public/uploads')+6);

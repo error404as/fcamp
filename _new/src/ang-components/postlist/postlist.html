@@ -1,5 +1,17 @@
-<h1>Blog Posts {{model.posts.length}}</h1>
-<ul>
-	<li ng-repeat="post in model.posts"><a href="/article/{{post.permalink}}">{{post.headline}}</a></li>
-</ul>
+<h1>Blog Posts</h1>
+<div class="loader-wrap" ng-show="model.loading">
+	<div class="loader"></div>
+</div>
+<div ng-hide="model.loading">
+	<table class="table">
+		<tr ng-repeat="post in model.posts">
+			<td class="wide"><a href="/article/{{post.permalink}}">{{post.headline}}</a></td>
+			<td><a href="#/edit/{{post.permalink}}">edit</a></td>
+			<td><a href="#/delete/{{post.permalink}}">delete</a></td>
+		</tr>
+	</table>
+	<div class="pager">Pager:
+		<span class="page" ng-class="{active: page.isActive}" ng-repeat="page in model.pager" ng-click="model.setPage(page.page)">{{page.page}}</span>
+	</div>
+</div>
 
