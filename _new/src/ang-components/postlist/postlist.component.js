@@ -1,6 +1,7 @@
 import angular from 'angular';
 
 function mController($http, fetcher){
+	'ngInject';
 	var model = this;
 
 	model.posts = [];
@@ -46,7 +47,7 @@ function mController($http, fetcher){
 
 export default {
 	template: require('./postlist.html'),
-	controller: ['$http', 'fetcher', mController],
+	controller: mController,
 	controllerAs: 'model'
 }
 

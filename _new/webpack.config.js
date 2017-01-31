@@ -1,4 +1,5 @@
 const webpack = require('webpack');
+var ngAnnotatePlugin = require('ng-annotate-webpack-plugin');
 
 module.exports = {
     entry: {
@@ -13,6 +14,7 @@ module.exports = {
         ]
     },
     plugins: [
+        new ngAnnotatePlugin({ add:true }),
         new webpack.DefinePlugin({
           'process.env': {
             NODE_ENV: JSON.stringify('production')

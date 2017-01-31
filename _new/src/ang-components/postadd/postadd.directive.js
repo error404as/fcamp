@@ -31,7 +31,8 @@ export const PostAddDirective =  function(){
 	return {
 		restrict: 'E',
 		template: require('./postadd.html'),
-		controller: ['$http', '$routeParams', 'fetcher', function($http, $routeParams, fetcher){
+		controller: function($http, $routeParams, fetcher){
+			'ngInject';
 			var model = this;
 			var date = new Date();
 
@@ -91,7 +92,7 @@ export const PostAddDirective =  function(){
 			}
 			
 
-		}],
+		},
 		controllerAs: 'model'
 	}
 }

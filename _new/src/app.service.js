@@ -5,6 +5,7 @@ export default angular.module('services', [])
     .name;
 
 function fetcher($http){
+	'ngInject';
     return {
         getPosts: getPosts,
         getPost: getPost

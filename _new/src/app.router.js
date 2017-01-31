@@ -1,4 +1,5 @@
 export default function($routeProvider, $locationProvider){
+	'ngInject';
 	$routeProvider
 		.when('/', {
 			template: '<post-list></post-list>'

@@ -29,7 +29,7 @@ function pageBuilder(active, total){
 
 export default {
 	template: require('./pager.html'),
-	controller: [mController],
+	controller: mController,
 	controllerAs: 'model',
 	bindings: {
 		limit: '<',
