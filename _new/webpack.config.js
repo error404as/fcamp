@@ -11,5 +11,14 @@ module.exports = {
             {test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/, query: { presets: ['latest','react'] }},
             {test: /\.html$/, loader: 'raw-loader', exclude: /node_modules/ }
         ]
-    }
+    },
+    plugins: [
+        new webpack.DefinePlugin({
+          'process.env': {
+            NODE_ENV: JSON.stringify('production')
+          }
+        }),
+        new webpack.optimize.UglifyJsPlugin()
+
+    ]
 };

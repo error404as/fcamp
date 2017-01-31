@@ -1,4 +1,4 @@
-<form action="/add" method="post" id="add_post" name="add_post" enctype="multipart/form-data" ng-submit="model.formCheck($event, add_post)" novalidate>
+<form action="/add" method="post" id="add_post" name="add_post" ng-submit="model.formCheck($event, add_post)" novalidate>
 	<div class="main">
 		<div class="content">
 			<h2>{{model.editing ? 'Edit post' : 'Add new post'}}</h2>
@@ -31,7 +31,7 @@
 		<aside class="sidebar">
 			<div class="form-item">
 				<label for="post_permalink">URL</label>
-				<input type="text" class="form-text" name="permalink" id="post_permalink" ng-model="model.post.permalink" ng-change="model.formatUrl()" autocomplete="off">
+				<input type="text" class="form-text" name="permalink" id="post_permalink" ng-model="model.post.permalink" ng-change="model.formatUrl()" autocomplete="off" ng-disabled="model.editing">
 				<div class="sub" id="post_permalink_preview">{{model.permalinkView}}</div>
 			</div>
 			<div class="form-item">
@@ -40,8 +40,8 @@
 				<input type="hidden" name="created" id="post_date_utc" ng-model="model.post.created">
 			</div>
 			<div class="form-item">
-				<label for="post_image">Cover image</label>
-				<input type="file" name="image" id="post_image">
+				<label for="post_image">Cover image URL</label>
+				<input type="text" name="image" id="post_image" class="form-text" ng-model="model.post.image">
 			</div>
 		</aside>
 	</div>

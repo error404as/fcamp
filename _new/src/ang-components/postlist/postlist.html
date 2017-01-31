@@ -5,13 +5,13 @@
 <div ng-hide="model.loading">
 	<table class="table">
 		<tr ng-repeat="post in model.posts">
+			<td class="img"><img ng-src="{{post.image}}" ng-show="post.image" /></td>
 			<td class="wide"><a href="/article/{{post.permalink}}">{{post.headline}}</a></td>
 			<td><a href="#/edit/{{post.permalink}}">edit</a></td>
-			<td><a href="#/delete/{{post.permalink}}">delete</a></td>
+			<td><a href="#" ng-click="model.deletePost($event, post.permalink)">delete</a></td>
 		</tr>
 	</table>
-	<div class="pager">Pager:
-		<span class="page" ng-class="{active: page.isActive}" ng-repeat="page in model.pager" ng-click="model.setPage(page.page)">{{page.page}}</span>
-	</div>
+
+	<post-pager limit="model.limit" active="model.active" total="model.total" action="model.setPage"></post-pager>
 </div>
 

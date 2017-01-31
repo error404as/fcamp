@@ -12,15 +12,21 @@ var Article = React.createClass({
           <div className="date">Published: {moment(this.props.post.created).format('YYYY-MM-DD HH:mm')}</div>
         </div>
         <h1>{this.props.post.headline}</h1>
-          <img src={this.props.post.image} alt={this.props.post.headline} />
-          <br />
-          <br />
+          {this.props.post.image &&
+            <div>
+              <img src={this.props.post.image} alt={this.props.post.headline} />
+              <br />
+              <br />
+            </div>
+          }
 
         {this.props.post.source &&
-          <a href={this.props.post.source}>Open source link</a>
+          <div>
+            <a href={this.props.post.source}>Open source link</a>
+            <br />
+            <br />
+          </div>
         }
-        <br />
-        <br />
         {this.props.post.body}
       </div>
     );

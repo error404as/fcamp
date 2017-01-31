@@ -46,8 +46,10 @@
 .cms-content {padding: 0 15px;}
 
 .table {border-collapse: collapse;}
-.table td {vertical-align: top; border: 1px solid #eee; padding: 5px 10px;}
+.table td {border: 1px solid #eee; padding: 5px 10px;}
 .table td.wide {width: 100%;}
+.table td.img {width: 100px; min-width: 100px; padding: 0;}
+.table td.img img {display: block;}
 
 .pager {
 	padding: 10px 0;
@@ -68,6 +70,7 @@
 .form-item .form-text.error:focus ~ .error-msg,
 .form-item textarea.error:focus ~ .error-msg {display: none;}
 .form-item .error-msg {color: #f00;}
+.form-item [disabled] {background: #eee;}
 .form-action {padding: 15px 0;}
 
 .footer {background: #2f2f2f; margin-top: 20px; padding: 5px 20px; color: #fff; overflow: hidden;}

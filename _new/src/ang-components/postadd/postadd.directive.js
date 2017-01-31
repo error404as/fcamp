@@ -46,14 +46,15 @@ export const PostAddDirective =  function(){
 			};
 			model.permalinkView = '';
 
-			model.createdView = setViewDate(date);
-
 			model.formatUrl = function(){
 				model.permalinkView = formatURL(model.post.permalink);
 			};
 			model.formatDate = function(){
-				model.created = setDate(model.createdView);
+				model.post.created = setDate(model.createdView);
 			};
+
+			model.createdView = setViewDate(date);
+			model.formatDate();
 
 			if($routeParams.id){
 
@@ -68,20 +69,21 @@ export const PostAddDirective =  function(){
 			}
 
 			model.formCheck = function(e,f){
-				e.preventDefault()
-				if(f.$valid){
-					console.log(model.post)
-
-					$http.post('/add/', model.post).then(function(){
-						console.log('done')
-					}, function(data,status){
-						console.log('error')
-						console.log(data)
-						console.log(status)
-
+				model.post.created = setDate(model.createdView);
+				if(model.editing && f.$valid){
+					e.preventDefault();
+					$http.post('/edit/', model.post).then(function(res){
+						if(res.data === 'OK'){
+							alert('Success edit')
+						} else {
+							alert('Error on saving updates')
+						}
+					},function(){
+						alert('Server Error!')
 					});
-
-				} else {
+				}
+				if(!f.$valid){
+					e.preventDefault()
 					for(var er in f.$error){
 						f.$error[er].forEach(itm=>itm.$setDirty())
 					}

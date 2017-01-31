@@ -7,8 +7,28 @@ module.exports = {
 		if(!data.permalink){
 			data.permalink = new Date().getTime();
 		}
-
+		if(!data.created){
+			data.created = new Date().toISOString()
+		}
+	console.log('ctrl')
+	console.log(data)
 		db.addPost(data,fn);
+	},
+	update: function(data,fn){
+		var post = {
+			headline: data.headline,
+			body: data.body,
+			permalink: data.permalink || new Date().getTime(),
+			image: data.image || '',
+			author: data.author,
+			tags: data.tags,
+			created: data.created || new Date().toISOString()
+		}
+		if( typeof data.tags !== 'object' ){
+			post.tags = data.tags ? data.tags.split(',').map(function(itm){ return itm.trim() }).filter(function(itm){ return itm }) : [];
+		}
+
+		db.updatePost(post,fn);
 	},
 	get: function(fn){
 		db.getAll(fn);

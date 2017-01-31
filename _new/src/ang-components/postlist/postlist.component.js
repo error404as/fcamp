@@ -1,11 +1,13 @@
 import angular from 'angular';
 
-function mController(fetcher){
+function mController($http, fetcher){
 	var model = this;
 
 	model.posts = [];
-	model.pager = [];
 	model.loading = false;
+	model.limit = 1;
+	model.active = 1;
+	model.total = 1;
 
 	model.$onInit = function(){
 		model.setPage(1);
@@ -14,27 +16,37 @@ function mController(fetcher){
 	model.setPage = function(n){
 		model.loading = true;
 		fetcher.getPosts(n).then(function(data){
+			console.log(data.items)
 			model.posts = data.items;
 			model.loading = false;
-			model.pager = pageBuilder(data.page, Math.ceil(data.total / data.perpage));
+			model.limit = data.perpage;
+			model.active = data.page;
+			model.total = data.total;
 		});
 	}
-}
 
-function pageBuilder(active, total){
-	var result = [];
-	for(var i = 1; i <= total; i++){
-		result.push({
-			page: i,
-			isActive: (i===active)
-		})
+	model.deletePost = function(e,id){
+		e.preventDefault();
+		var conf = confirm('Do you want to detele this article?');
+		if(conf){
+			$http.get('/article/'+id+'?action=delete').then(function(e,d){
+				var ind = -1;
+				model.posts.forEach(function(itm, index){
+					if(itm.permalink == id){
+						ind = index;
+					}
+				});
+				if(ind !== -1){
+					model.posts.splice(ind,1);
+				}
+			});
+		}
 	}
-	return result;
 }
 
 export default {
 	template: require('./postlist.html'),
-	controller: ['fetcher', mController],
+	controller: ['$http', 'fetcher', mController],
 	controllerAs: 'model'
 }
 

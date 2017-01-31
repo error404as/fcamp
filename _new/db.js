@@ -25,6 +25,14 @@ module.exports = {
 			}
 		});	
 	},
+	updatePost: function(data,fn){
+		//console.log(data)
+		BlogPost.update({permalink: data.permalink}, {$set:data}, {upsert:true}, function(err, data){
+			if(typeof fn === 'function'){
+				fn({result: !err});
+			}
+		});	
+	},
 	getAll: function(fn){
 		BlogPost.find().sort({created: -1}).exec(function(err, data){
 			fn(data)

@@ -37,26 +37,32 @@ router.get('/add', isLoggedIn, function(req, res, next) {
 });
 
 router.post('/add', isLoggedIn, function(req, res, next) {
+	console.log(req.body)
+	var fields = req.body;
 
-	var infile = new formi.IncomingForm();
-	infile.uploadDir = path.resolve(__dirname, '../', 'public/uploads');
-	infile.keepExtensions = true;
-	infile.parse(req, function(err, fields, files){
-		fields.image = '';
-		if(files && files.image && files.image.size){
-			console.log(files.image.path)
-			var imgpath = files.image.path.replace(/\\/g,'/');
-			fields.image = files.image.path.substring(imgpath.indexOf('public/uploads')+6);
-			console.log(fields.image)
+	fields.author = req.user.local.username;
+	console.log('router')
+	console.log(fields)
+	ctrl.create(fields, function(db){
+		if(db.result){
+			res.redirect('/article/'+fields.permalink);
+		} else {
+			res.redirect('/cms/#/add');
 		}
-		fields.author = req.user.local.username;
-		ctrl.create(fields, function(db){
-			if(db.result){
-				res.redirect('/article/'+fields.permalink);
-			} else {
-				res.redirect('/add');
-			}
-		});
+	});
+
+    
+});
+
+router.post('/edit', isLoggedIn, function(req, res, next) {
+
+	req.body.author = req.body.author || req.user.local.username;
+	ctrl.update(req.body, function(db){
+		if(db.result){
+			res.send('OK');
+		} else {
+			res.send('ERROR');
+		}
 	});
     
 });
@@ -79,13 +85,9 @@ router.get('/login', isLoggedOut, function(req, res, next) {
   res.render('login.ejs', { title: 'Login', message: req.flash('loginMessage'), editor: res.isuser });
 });
 
+/*
 router.get('/signup', isLoggedOut, function(req, res) {  
   res.render('signup.ejs', { title: 'Sign Up', message: req.flash('loginMessage'), editor: res.isuser });
-});
-
-router.get('/logout', function(req, res) {  
-  req.logout();
-  res.redirect('/');
 });
 
 router.post('/signup', passport.authenticate('local-signup', {  
@@ -93,9 +95,15 @@ router.post('/signup', passport.authenticate('local-signup', {
   failureRedirect: '/signup',
   failureFlash: true,
 }));
+*/
+
+router.get('/logout', function(req, res) {  
+  req.logout();
+  res.redirect('/');
+});
 
 router.post('/login', passport.authenticate('local-login', {  
-  successRedirect: '/',
+  successRedirect: '/cms',
   failureRedirect: '/login',
   failureFlash: true,
 }));
@@ -103,7 +111,6 @@ router.post('/login', passport.authenticate('local-login', {
 module.exports = router;
 
 function isLoggedIn(req, res, next) {  
-	return next()
 	if(req.isAuthenticated()) { return next() };
 	res.redirect('/login');
 }

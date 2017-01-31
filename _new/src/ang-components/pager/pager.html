@@ -1,0 +1,11 @@
+
+<div class="pager">
+	Pager:
+	<span class="page"
+		ng-repeat="page in model.pager"
+		ng-class="{active: page.isActive}"
+		ng-click="model.action(page.page)"
+		ng-bind-html="page.page | pager : page.isActive"
+		></span>
+</div>
+
