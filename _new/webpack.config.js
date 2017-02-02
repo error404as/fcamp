@@ -12,7 +12,7 @@ module.exports = {
             {test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/, query: { presets: ['latest','react'] }},
             {test: /\.html$/, loader: 'raw-loader', exclude: /node_modules/ }
         ]
-    },
+    }/*,
     plugins: [
         new ngAnnotatePlugin({ add:true }),
         new webpack.DefinePlugin({
@@ -22,5 +22,5 @@ module.exports = {
         }),
         new webpack.optimize.UglifyJsPlugin()
 
-    ]
+    ]*/
 };

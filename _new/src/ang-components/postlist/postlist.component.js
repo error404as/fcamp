@@ -1,6 +1,6 @@
 import angular from 'angular';
 
-function mController($http, fetcher){
+function mController(fetcher){
 	'ngInject';
 	var model = this;
 
@@ -30,7 +30,7 @@ function mController($http, fetcher){
 		e.preventDefault();
 		var conf = confirm('Do you want to detele this article?');
 		if(conf){
-			$http.get('/article/'+id+'?action=delete').then(function(e,d){
+			fetcher.delPost(id).then(function(){
 				var ind = -1;
 				model.posts.forEach(function(itm, index){
 					if(itm.permalink == id){

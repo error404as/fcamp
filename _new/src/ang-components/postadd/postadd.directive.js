@@ -31,7 +31,7 @@ export const PostAddDirective =  function(){
 	return {
 		restrict: 'E',
 		template: require('./postadd.html'),
-		controller: function($http, $routeParams, fetcher){
+		controller: function($routeParams, fetcher){
 			'ngInject';
 			var model = this;
 			var date = new Date();
@@ -73,14 +73,12 @@ export const PostAddDirective =  function(){
 				model.post.created = setDate(model.createdView);
 				if(model.editing && f.$valid){
 					e.preventDefault();
-					$http.post('/edit/', model.post).then(function(res){
-						if(res.data === 'OK'){
+					fetcher.updPost(model.post).then(function(data){
+						if(data === 'OK'){
 							alert('Success edit')
 						} else {
 							alert('Error on saving updates')
 						}
-					},function(){
-						alert('Server Error!')
 					});
 				}
 				if(!f.$valid){
@@ -90,11 +88,8 @@ export const PostAddDirective =  function(){
 					}
 				}
 			}
-			
 
 		},
 		controllerAs: 'model'
 	}
 }
-/*
-*/

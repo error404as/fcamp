@@ -8,7 +8,3 @@ export const PostAdd = angular
 	.directive('postAdd', PostAddDirective)
 	.directive('checkMinlen', InputCheck)
 	.name;
-
-
-
-
