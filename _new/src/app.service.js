@@ -1,7 +1,9 @@
 import angular from 'angular';
+import ngRouter from 'angular-route';
 
-export default angular.module('services', [])
+export default angular.module('services', [ngRouter])
     .service('fetcher', fetcher)
+    .service('router', router)
     .name;
 
 function fetcher($http){
@@ -24,5 +26,15 @@ function fetcher($http){
 	}
 	function deletePost(id){
 		return $http.get('/article/'+id+'?action=delete');
+	}
+}
+
+function router($routeParams){
+	'ngInject';
+	return {
+		getId: getId
+	}
+	function getId(){
+		return $routeParams.id
 	}
 }

@@ -19,10 +19,7 @@ function setDate(val){
 		val += ' 00:00';
 	}
 
-	if(new Date('2016-12-15T17:08').toISOString().indexOf('2016-12-15T17:08') !== 0){
-		// I know, this is IE ;)
-		val = val.replace(' ','T');
-	}
+	val = val.replace(' ','T');
 
 	return new Date(val).toISOString();
 }
@@ -31,12 +28,13 @@ export const PostAddDirective =  function(){
 	return {
 		restrict: 'E',
 		template: require('./postadd.html'),
-		controller: function($routeParams, fetcher){
+		controller: function(fetcher, router){
 			'ngInject';
 			var model = this;
 			var date = new Date();
+			var editingId = router.getId()
 
-			model.editing = $routeParams.id || '';
+			model.editing = editingId || '';
 			model.post = {
 				headline: '',
 				body: '',
@@ -57,9 +55,9 @@ export const PostAddDirective =  function(){
 			model.createdView = setViewDate(date);
 			model.formatDate();
 
-			if($routeParams.id){
+			if(editingId){
 
-				fetcher.getPost($routeParams.id).then(function(data){
+				fetcher.getPost(editingId).then(function(data){
 					console.log(data)
 
 					model.post = data;
