@@ -1,5 +1,4 @@
-import { PostAdd } from '../../src/ang-components/postadd/postadd.module';
-//import { AppAddBtn } from '../../src/ang-components/testbtn/testbtn.module';
+import { PostAdd } from '../../src/cms/components/postadd/postadd.module';
 
 describe('post form directive', function() {
   var suite = {};

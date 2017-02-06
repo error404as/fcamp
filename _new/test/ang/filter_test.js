@@ -1,4 +1,4 @@
-import { appPager } from '../../src/ang-components/pager/pager.module';
+import { appPager } from '../../src/cms/components/pager/pager.module';
 
 describe('active pager item filter', function() {
 
