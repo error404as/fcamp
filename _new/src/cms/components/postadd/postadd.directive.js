@@ -58,8 +58,6 @@ export const PostAddDirective =  function(){
 			if(editingId){
 
 				fetcher.getPost(editingId).then(function(data){
-					console.log(data)
-
 					model.post = data;
 					model.formatUrl();
 					model.createdView = setViewDate(model.post.created);
