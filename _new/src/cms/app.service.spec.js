@@ -1,4 +1,4 @@
-import AppService from '../../src/cms/app.service';
+import AppService from './app.service';
 
 describe('app.service', function() {
   var suite = {};

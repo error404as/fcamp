@@ -1,11 +1,7 @@
 export const pager = function(){
 
-	var result = function(input, active) {
-		if(active){
-			return '<b>'+input+'</b>';
-		}
-		return input;
+	return (input, active) => {
+		return active ? `<b>${input}</b>` : input;
 	};
-	return result;
 
 }

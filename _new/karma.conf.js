@@ -27,14 +27,14 @@ module.exports = function(config) {
         'public/js/cms.vendor.js',
         './node_modules/angular-mocks/angular-mocks.js',
         'public/js/cms.build.js',
-        'test/test.js'
+        './src/**/*.spec.js'
     ],
     exclude: [],
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-        'test/test.js': ['webpack'],
+        './src/**/*.spec.js': ['webpack'],
         'public/js/cms.build.js': ['coverage']
     },
 

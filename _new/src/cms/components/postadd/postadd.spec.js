@@ -1,5 +1,5 @@
-import 'es6-promise/auto';
-import { PostAdd } from '../../src/cms/components/postadd/postadd.module';
+import { Promise } from 'es6-promise';
+import { PostAdd } from './postadd.module';
 
 describe('post form directive', function() {
   var suite = {};
@@ -54,23 +54,6 @@ describe('post form directive', function() {
 
     expect(element.html()).toContain('Edit post');
     expect(element.html()).not.toContain('Add new post');
-  });
-
-  it('post form input make dirty', function() {
-
-    testRouteValue = null;
-
-    var element = suite.compile(suite.element)(suite.scope);
-    suite.scope.$digest();
-
-    expect(suite.scope.add_post.body.$dirty).toBe(false);
-
-    suite.scope.model.formCheck(
-      {preventDefault:function(){}},
-      suite.scope.add_post
-    );
-
-    expect(suite.scope.add_post.body.$dirty).toBe(true);
   });
 
 });

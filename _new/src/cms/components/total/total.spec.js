@@ -1,4 +1,4 @@
-import { postTotal } from '../../src/cms/components/total/total.module';
+import { postTotal } from './total.module';
 
 describe('total component', function() {
 
