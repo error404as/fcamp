@@ -7,6 +7,9 @@ export default function($routeProvider, $locationProvider){
 		.when('/add', {
 			template: '<post-add></post-add>'
 		})
+		.when('/add-news', {
+			template: '<add-news-from-api></add-news-from-api>'
+		})
 		.when('/edit/:id', {
 			template: '<post-add></post-add>'
 		})

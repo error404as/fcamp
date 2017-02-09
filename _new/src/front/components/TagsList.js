@@ -8,7 +8,7 @@ var TagsList = React.createClass({
   },
   render() {
     return (
-      <div className="tags">
+      <div className="tags" style={{ display: (this.props.tags.length ? 'block' : 'none') }}>
         <h3>Tags</h3>
         <ul>
           {this.props.tags.map((tag)=>{

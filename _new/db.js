@@ -48,6 +48,11 @@ module.exports = {
 			fn(data)
 		});
 	},
+	getBySource: function(urls,fn){
+		BlogPost.find({ source: {$in: urls} }).exec(function(err, data){
+			fn(data)
+		});
+	},
 	deleteByPermalink: function(id,fn){
 		BlogPost.remove({permalink: id}).exec(function(err){
 			fn();

@@ -498,7 +498,7 @@ webpackJsonp([0],{
 	  render: function render() {
 	    return _react2.default.createElement(
 	      'div',
-	      { className: 'tags' },
+	      { className: 'tags', style: { display: this.props.tags.length ? 'block' : 'none' } },
 	      _react2.default.createElement(
 	        'h3',
 	        null,

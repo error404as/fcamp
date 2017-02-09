@@ -1,0 +1,32 @@
+<div class="news-all">
+	<div class="news-header">
+		<h1><a href="#">News From NewsAPI.org</a></h1>
+	</div>
+
+	<div class="news-nav">
+		<ul>
+			<li ng-repeat="src in model.sources" ng-class="{active: src === model.current}">
+				<span class="link" ng-click="model.fetchFrom($event, src)">
+					<span class="img"><img ng-src="http://i.newsapi.org/{{src}}-m.png" alt="{{src}}"></span>
+					<span class="name">{{src}}</span>
+				</span>
+			</li>
+		</ul>
+	</div>
+
+	<div class="loader-wrap" ng-show="model.loading">
+		<div class="loader"></div>
+	</div>
+	<div class="news-view" ng-hide="model.loading">
+		<div class="item" ng-repeat="post in model.posts">
+			<a href="{{post.url}}" class="{{post.status}}" ng-click="model.addItem($event, post.url)">
+				<div class="vis"><div class="img"><img ng-src="{{post.urlToImage}}"></div></div>
+				<h2>{{post.title}}</h2>
+
+				<div class="pubdate">{{post.publishedAt | date:'yyyy-MM-dd HH:mm'}}</div>
+				<p>{{post.description}}</p>
+			</a>
+		</div>
+	</div>
+</div>
+

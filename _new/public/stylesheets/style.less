@@ -51,6 +51,18 @@
 .table td.img {width: 100px; min-width: 100px; padding: 0;}
 .table td.img img {display: block;}
 
+.ng-confirm {position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 0; background: rgba(255,255,255,.8);}
+.ng-confirm .inner {
+	position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+	width: 300px; padding: 20px;
+	background: #fff; border: 1px solid #aaa;
+	text-align: center;
+}
+.ng-confirm .text {margin-bottom: 20px;}
+.ng-confirm .text h4 {margin: 10px 0; font-size: 17px; font-weight: bold;}
+.ng-confirm .button {margin-right: 20px;}
+
+
 .pager {
 	padding: 10px 0;
 	.page {display: inline-block; vertical-align: middle; margin: 0 3px; padding: 3px 12px 1px; border: 1px solid #ddd; cursor: pointer;}
@@ -114,6 +126,7 @@
 	transition: background .3s, color .3s;
 	cursor: pointer; outline: none; box-sizing: border-box;
 }
+.button:target {background: #c14550; color: #fff !important;}
 .button:hover {background: #c14550; color: #fff !important;}
 
 .button input {
@@ -125,12 +138,6 @@
 	outline: none;
 }
 .button:hover input {color: #fff !important;}
-
-.button--reverse {background: #c14550; color: #fff !important;}
-.button--reverse:hover {color: #c14550 !important; background: #fff;}
-.button--reverse input {color: #fff !important;}
-.button--reverse:hover input {color: #c14550 !important;}
-
 
 .loader-wrap {
     overflow: hidden;
@@ -165,3 +172,4 @@
         transform: rotate(360deg);
     }
 }
+

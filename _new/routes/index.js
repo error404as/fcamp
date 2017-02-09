@@ -37,12 +37,10 @@ router.get('/add', isLoggedIn, function(req, res, next) {
 });
 
 router.post('/add', isLoggedIn, function(req, res, next) {
-	console.log(req.body)
 	var fields = req.body;
 
 	fields.author = req.user.local.username;
-	console.log('router')
-	console.log(fields)
+
 	ctrl.create(fields, function(db){
 		if(db.result){
 			res.redirect('/article/'+fields.permalink);
@@ -51,7 +49,6 @@ router.post('/add', isLoggedIn, function(req, res, next) {
 		}
 	});
 
-    
 });
 
 router.post('/edit', isLoggedIn, function(req, res, next) {
@@ -64,11 +61,7 @@ router.post('/edit', isLoggedIn, function(req, res, next) {
 			res.send('ERROR');
 		}
 	});
-    
-});
 
-router.get('/add-news', isLoggedIn, function(req, res, next) {
-	res.render('add-news', { title: 'Add new post', editor: res.isuser });
 });
 
 router.post('/add-news', isLoggedIn, function(req, res, next) {
@@ -78,6 +71,12 @@ router.post('/add-news', isLoggedIn, function(req, res, next) {
 		} else {
 			res.send('Error');
 		}
+	});   
+});
+
+router.post('/check-exists', function(req, res, next) {
+	ctrl.checkBySource(req.body, function(db){
+		res.send(db);
 	});   
 });
 

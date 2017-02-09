@@ -12,6 +12,8 @@
 		</tr>
 	</table>
 
+	<confirm-this ng-show="model.confirmArgs" text="model.confirmText" action="model.deletePost" actionargs="model.confirmArgs"></confirm-this>
+
 	<post-pager limit="model.limit" active="model.active" total="model.total" action="model.setPage"></post-pager>
 
 	<posts-total limit="model.limit" active="model.active" total="model.total"></posts-total>

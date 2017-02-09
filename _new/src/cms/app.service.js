@@ -12,7 +12,10 @@ function fetcher($http){
         getPosts: getPosts,
         getPost: getPost,
         updPost: updatePost,
-        delPost: deletePost
+        delPost: deletePost,
+        getNews: getNews,
+        addNewsItem: addNewsItem,
+        checkExists: checkExists
     };
 
 	function getPosts(page){
@@ -26,6 +29,15 @@ function fetcher($http){
 	}
 	function deletePost(id){
 		return $http.get('/article/'+id+'?action=delete');
+	}
+	function getNews(source){
+		return $http.get('https://newsapi.org/v1/articles?source='+source+'&apiKey=d3a3b4d86b5d48dd98a34ed0bcebfa07').then(resp => resp.data);
+	}
+	function addNewsItem(post){
+		return $http.post('/add-news', post).then(resp => resp.data);
+	}
+	function checkExists(urls){
+		return $http.post('/check-exists', urls).then(resp => resp.data);
 	}
 }
 

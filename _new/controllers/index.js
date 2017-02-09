@@ -10,8 +10,6 @@ module.exports = {
 		if(!data.created){
 			data.created = new Date().toISOString()
 		}
-	console.log('ctrl')
-	console.log(data)
 		db.addPost(data,fn);
 	},
 	update: function(data,fn){
@@ -48,6 +46,9 @@ module.exports = {
 	},
 	getPostsByTags: function(id,fn){
 		db.getByTag(id,fn);
+	},
+	checkBySource: function(urls, fn){
+		db.getBySource(urls,fn);
 	}
 }
 

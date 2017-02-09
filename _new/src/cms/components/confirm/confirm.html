@@ -1,0 +1,8 @@
+<div class="ng-confirm" ng-show="model.visible">
+	<div class="inner">
+		<div class="text" ng-bind-html="model.text"></div>
+		<a href="#" class="button" ng-click="model.confirmAction($event)">Confirm</a>
+		<a href="#" ng-click="model.cancelAction($event)">Cancel</a>
+	</div>
+</div>
+

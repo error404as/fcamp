@@ -50,6 +50,8 @@ webpackJsonp([0],[
 			template: '<post-list></post-list>'
 		}).when('/add', {
 			template: '<post-add></post-add>'
+		}).when('/add-news', {
+			template: '<add-news-from-api></add-news-from-api>'
 		}).when('/edit/:id', {
 			template: '<post-add></post-add>'
 		}).otherwise({ redirectTo: '/' });
@@ -67,7 +69,7 @@ webpackJsonp([0],[
 	  value: true
 	});
 	var AppComponent = exports.AppComponent = {
-	  template: "\n  \t<div class=\"cms-content\">\n\t    <a href=\"#/\" class=\"button\">Posts list</a>\n\t\t<btn-add-post></btn-add-post>\n\t    <ng-view></ng-view>\n    </div>\n  "
+	  template: "\n  \t<div class=\"cms-content\">\n\t\t<btn url=\"\" text=\"Posts list\"></btn>\n\t\t<btn url=\"add\" text=\"Write post\"></btn>\n\t\t<btn url=\"add-news\" text=\"Add news\"></btn>\n\t    <ng-view></ng-view>\n    </div>\n  "
 	};
 
 /***/ },
@@ -89,11 +91,15 @@ webpackJsonp([0],[
 
 	var _postlist = __webpack_require__(13);
 
-	var _addbtn = __webpack_require__(25);
+	var _addnews = __webpack_require__(28);
+
+	var _btn = __webpack_require__(31);
+
+	var _confirm = __webpack_require__(25);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var ComponentsModule = exports.ComponentsModule = _angular2.default.module('app.components', [_postadd.PostAdd, _postlist.PostList, _addbtn.AppAddPost]).name;
+	var ComponentsModule = exports.ComponentsModule = _angular2.default.module('app.components', [_postadd.PostAdd, _postlist.PostList, _addnews.AddNewsApi, _btn.CmsBtn, _confirm.ConfirmAction]).name;
 
 /***/ },
 /* 8 */
@@ -194,8 +200,6 @@ webpackJsonp([0],[
 				if (editingId) {
 
 					fetcher.getPost(editingId).then(function (data) {
-						console.log(data);
-
 						model.post = data;
 						model.formatUrl();
 						model.createdView = setViewDate(model.post.created);
@@ -301,7 +305,10 @@ webpackJsonp([0],[
 			getPosts: getPosts,
 			getPost: getPost,
 			updPost: updatePost,
-			delPost: deletePost
+			delPost: deletePost,
+			getNews: getNews,
+			addNewsItem: addNewsItem,
+			checkExists: checkExists
 		};
 
 		function getPosts(page) {
@@ -321,6 +328,21 @@ webpackJsonp([0],[
 		}
 		function deletePost(id) {
 			return $http.get('/article/' + id + '?action=delete');
+		}
+		function getNews(source) {
+			return $http.get('https://newsapi.org/v1/articles?source=' + source + '&apiKey=d3a3b4d86b5d48dd98a34ed0bcebfa07').then(function (resp) {
+				return resp.data;
+			});
+		}
+		function addNewsItem(post) {
+			return $http.post('/add-news', post).then(function (resp) {
+				return resp.data;
+			});
+		}
+		function checkExists(urls) {
+			return $http.post('/check-exists', urls).then(function (resp) {
+				return resp.data;
+			});
 		}
 	}
 
@@ -364,9 +386,11 @@ webpackJsonp([0],[
 
 	var _total = __webpack_require__(22);
 
+	var _confirm = __webpack_require__(25);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var PostList = exports.PostList = _angular2.default.module('postsList', [_app2.default, _pager.appPager, _total.postTotal]).component('postList', _postlist2.default).name;
+	var PostList = exports.PostList = _angular2.default.module('postsList', [_app2.default, _pager.appPager, _total.postTotal, _confirm.ConfirmAction]).component('postList', _postlist2.default).name;
 
 /***/ },
 /* 14 */
@@ -396,6 +420,9 @@ webpackJsonp([0],[
 		model.active = 1;
 		model.total = 1;
 
+		model.confirmArgs = null;
+		model.confirmText = '';
+
 		model.$onInit = function () {
 			model.setPage(1);
 		};
@@ -412,21 +439,20 @@ webpackJsonp([0],[
 			});
 		};
 
-		model.deletePost = function (e, id) {
+		model.deletePost = function (e, id, imsure) {
 			e.preventDefault();
-			var conf = confirm('Do you want to detele this article?');
-			if (conf) {
+			if (imsure) {
+				model.confirmArgs = null;
+				model.loading = true; // not really, but :)
 				fetcher.delPost(id).then(function () {
-					var ind = -1;
-					model.posts.forEach(function (itm, index) {
-						if (itm.permalink == id) {
-							ind = index;
-						}
-					});
-					if (ind !== -1) {
-						model.posts.splice(ind, 1);
-					}
+					model.setPage(model.active);
 				});
+			} else {
+				var post = model.posts.filter(function (itm) {
+					return itm.permalink === id;
+				})[0];
+				model.confirmText = 'Do you want to delete the article? <h4>"' + post.headline + '"</h4><img src="' + post.image + '">';
+				model.confirmArgs = [id];
 			}
 		};
 	}
@@ -441,26 +467,22 @@ webpackJsonp([0],[
 /* 15 */
 /***/ function(module, exports) {
 
-	module.exports = "<h1>Blog Posts</h1>\r\n<div class=\"loader-wrap\" ng-show=\"model.loading\">\r\n\t<div class=\"loader\"></div>\r\n</div>\r\n<div ng-hide=\"model.loading\">\r\n\t<table class=\"table\">\r\n\t\t<tr ng-repeat=\"post in model.posts\">\r\n\t\t\t<td class=\"img\"><img ng-src=\"{{post.image}}\" ng-show=\"post.image\" /></td>\r\n\t\t\t<td class=\"wide\"><a href=\"/article/{{post.permalink}}\">{{post.headline}}</a></td>\r\n\t\t\t<td><a href=\"#/edit/{{post.permalink}}\">edit</a></td>\r\n\t\t\t<td><a href=\"#\" ng-click=\"model.deletePost($event, post.permalink)\">delete</a></td>\r\n\t\t</tr>\r\n\t</table>\r\n\r\n\t<post-pager limit=\"model.limit\" active=\"model.active\" total=\"model.total\" action=\"model.setPage\"></post-pager>\r\n\r\n\t<posts-total limit=\"model.limit\" active=\"model.active\" total=\"model.total\"></posts-total>\r\n</div>\r\n\r\n"
+	module.exports = "<h1>Blog Posts</h1>\r\n<div class=\"loader-wrap\" ng-show=\"model.loading\">\r\n\t<div class=\"loader\"></div>\r\n</div>\r\n<div ng-hide=\"model.loading\">\r\n\t<table class=\"table\">\r\n\t\t<tr ng-repeat=\"post in model.posts\">\r\n\t\t\t<td class=\"img\"><img ng-src=\"{{post.image}}\" ng-show=\"post.image\" /></td>\r\n\t\t\t<td class=\"wide\"><a href=\"/article/{{post.permalink}}\">{{post.headline}}</a></td>\r\n\t\t\t<td><a href=\"#/edit/{{post.permalink}}\">edit</a></td>\r\n\t\t\t<td><a href=\"#\" ng-click=\"model.deletePost($event, post.permalink)\">delete</a></td>\r\n\t\t</tr>\r\n\t</table>\r\n\r\n\t<confirm-this ng-show=\"model.confirmArgs\" text=\"model.confirmText\" action=\"model.deletePost\" actionargs=\"model.confirmArgs\"></confirm-this>\r\n\r\n\t<post-pager limit=\"model.limit\" active=\"model.active\" total=\"model.total\" action=\"model.setPage\"></post-pager>\r\n\r\n\t<posts-total limit=\"model.limit\" active=\"model.active\" total=\"model.total\"></posts-total>\r\n</div>\r\n\r\n"
 
 /***/ },
 /* 16 */
 /***/ function(module, exports) {
 
-	'use strict';
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
 	var pager = exports.pager = function pager() {
 
-		var result = function result(input, active) {
-			if (active) {
-				return '<b>' + input + '</b>';
-			}
-			return input;
+		return function (input, active) {
+			return active ? "<b>" + input + "</b>" : input;
 		};
-		return result;
 	};
 
 /***/ },
@@ -636,19 +658,23 @@ webpackJsonp([0],[
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-	exports.AppAddPost = undefined;
+	exports.ConfirmAction = undefined;
 
 	var _angular = __webpack_require__(1);
 
 	var _angular2 = _interopRequireDefault(_angular);
 
-	var _addbtn = __webpack_require__(26);
+	var _confirm = __webpack_require__(26);
 
-	var _addbtn2 = _interopRequireDefault(_addbtn);
+	var _confirm2 = _interopRequireDefault(_confirm);
+
+	var _angularSanitize = __webpack_require__(20);
+
+	var _angularSanitize2 = _interopRequireDefault(_angularSanitize);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var AppAddPost = exports.AppAddPost = _angular2.default.module('appbtn', []).component('btnAddPost', _addbtn2.default).name;
+	var ConfirmAction = exports.ConfirmAction = _angular2.default.module('confirmAction', [_angularSanitize2.default]).component('confirmThis', _confirm2.default).name;
 
 /***/ },
 /* 26 */
@@ -659,15 +685,231 @@ webpackJsonp([0],[
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
+
+	var _angular = __webpack_require__(1);
+
+	var _angular2 = _interopRequireDefault(_angular);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+	function mController() {
+		var model = this;
+
+		model.visible = false;
+
+		model.$onChanges = function () {
+			model.visible = true;
+		};
+
+		model.confirmAction = function (e) {
+			e.preventDefault();
+			model.action.apply(model, [e].concat(_toConsumableArray(model.actionargs), [true]));
+		};
+
+		model.cancelAction = function (e) {
+			e.preventDefault();
+			model.visible = false;
+		};
+	}
+
 	exports.default = {
-		template: __webpack_require__(27)
+		template: __webpack_require__(27),
+		controller: mController,
+		controllerAs: 'model',
+		bindings: {
+			action: '<',
+			actionargs: '<',
+			text: '<'
+		}
 	};
 
 /***/ },
 /* 27 */
 /***/ function(module, exports) {
 
-	module.exports = "<a href=\"#/add\" class=\"button\">Add post</a>\r\n\r\n"
+	module.exports = "<div class=\"ng-confirm\" ng-show=\"model.visible\">\r\n\t<div class=\"inner\">\r\n\t\t<div class=\"text\" ng-bind-html=\"model.text\"></div>\r\n\t\t<a href=\"#\" class=\"button\" ng-click=\"model.confirmAction($event)\">Confirm</a>\r\n\t\t<a href=\"#\" ng-click=\"model.cancelAction($event)\">Cancel</a>\r\n\t</div>\r\n</div>\r\n\r\n"
+
+/***/ },
+/* 28 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.AddNewsApi = undefined;
+
+	var _angular = __webpack_require__(1);
+
+	var _angular2 = _interopRequireDefault(_angular);
+
+	var _addnews = __webpack_require__(29);
+
+	var _addnews2 = _interopRequireDefault(_addnews);
+
+	var _app = __webpack_require__(12);
+
+	var _app2 = _interopRequireDefault(_app);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var AddNewsApi = exports.AddNewsApi = _angular2.default.module('addNews', [_app2.default]).component('addNewsFromApi', _addnews2.default).name;
+
+/***/ },
+/* 29 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	mController.$inject = ["fetcher"];
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _angular = __webpack_require__(1);
+
+	var _angular2 = _interopRequireDefault(_angular);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function mController(fetcher) {
+		'ngInject';
+
+		var model = this;
+
+		model.posts = [];
+		model.loading = false;
+		model.current = '';
+		model.sources = ["bbc-news", "bloomberg", "cnn", "google-news", "hacker-news", "mtv-news", "national-geographic", "polygon", "reddit-r-all", "reuters", "techradar", "the-guardian-uk", "the-new-york-times", "the-telegraph", "the-washington-post", "time", "usa-today"];
+
+		model.$onInit = function () {
+			window.document.body.classList.remove('has_data');
+		};
+
+		model.fetchFrom = function (e, source) {
+			e.preventDefault();
+			window.document.body.classList.add('has_data');
+			model.loading = true;
+			model.current = source;
+			fetcher.getNews(source).then(function (data) {
+				model.loading = false;
+				model.current = data.source;
+				model.posts = data.articles;
+
+				var urls = data.articles.map(function (itm) {
+					return itm.url;
+				});
+				fetcher.checkExists(urls).then(function (result) {
+					if (result.length) {
+						var matches = result.map(function (itm) {
+							return itm.source;
+						});
+						model.posts.forEach(function (itm) {
+							if (matches.indexOf(itm.url) !== -1) {
+								itm.status = 'added';
+							}
+						});
+					}
+				});
+			});
+		};
+		model.addItem = function (event, url) {
+			event.preventDefault();
+			var item = model.posts.filter(function (itm) {
+				return itm.url === url;
+			})[0];
+			if (item && !item.status) {
+				item.status = 'adding';
+				var sendingData = {
+					author: item.author || model.current,
+					permalink: new Date().getTime(),
+					headline: item.title,
+					body: item.description || ' ', // some articles has no description
+					image: item.urlToImage,
+					created: item.publishedAt,
+					tags: this.currentSource,
+					source: item.url
+				};
+				fetcher.addNewsItem(sendingData).then(function (data) {
+					item.status = data === 'OK' ? 'added' : 'error';
+				});
+			}
+		};
+	}
+
+	exports.default = {
+		template: __webpack_require__(30),
+		controller: mController,
+		controllerAs: 'model'
+	};
+
+/***/ },
+/* 30 */
+/***/ function(module, exports) {
+
+	module.exports = "<div class=\"news-all\">\r\n\t<div class=\"news-header\">\r\n\t\t<h1><a href=\"#\">News From NewsAPI.org</a></h1>\r\n\t</div>\r\n\r\n\t<div class=\"news-nav\">\r\n\t\t<ul>\r\n\t\t\t<li ng-repeat=\"src in model.sources\" ng-class=\"{active: src === model.current}\">\r\n\t\t\t\t<span class=\"link\" ng-click=\"model.fetchFrom($event, src)\">\r\n\t\t\t\t\t<span class=\"img\"><img ng-src=\"http://i.newsapi.org/{{src}}-m.png\" alt=\"{{src}}\"></span>\r\n\t\t\t\t\t<span class=\"name\">{{src}}</span>\r\n\t\t\t\t</span>\r\n\t\t\t</li>\r\n\t\t</ul>\r\n\t</div>\r\n\r\n\t<div class=\"loader-wrap\" ng-show=\"model.loading\">\r\n\t\t<div class=\"loader\"></div>\r\n\t</div>\r\n\t<div class=\"news-view\" ng-hide=\"model.loading\">\r\n\t\t<div class=\"item\" ng-repeat=\"post in model.posts\">\r\n\t\t\t<a href=\"{{post.url}}\" class=\"{{post.status}}\" ng-click=\"model.addItem($event, post.url)\">\r\n\t\t\t\t<div class=\"vis\"><div class=\"img\"><img ng-src=\"{{post.urlToImage}}\"></div></div>\r\n\t\t\t\t<h2>{{post.title}}</h2>\r\n\r\n\t\t\t\t<div class=\"pubdate\">{{post.publishedAt | date:'yyyy-MM-dd HH:mm'}}</div>\r\n\t\t\t\t<p>{{post.description}}</p>\r\n\t\t\t</a>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n\r\n"
+
+/***/ },
+/* 31 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.CmsBtn = undefined;
+
+	var _angular = __webpack_require__(1);
+
+	var _angular2 = _interopRequireDefault(_angular);
+
+	var _btn = __webpack_require__(32);
+
+	var _btn2 = _interopRequireDefault(_btn);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var CmsBtn = exports.CmsBtn = _angular2.default.module('btn', []).component('btn', _btn2.default).name;
+
+/***/ },
+/* 32 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _angular = __webpack_require__(1);
+
+	var _angular2 = _interopRequireDefault(_angular);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function mController() {
+		var model = this;
+	}
+
+	exports.default = {
+		template: __webpack_require__(33),
+		controller: mController,
+		controllerAs: 'model',
+		bindings: {
+			url: '@',
+			text: '@'
+		}
+	};
+
+/***/ },
+/* 33 */
+/***/ function(module, exports) {
+
+	module.exports = "<a href=\"#/{{model.url}}\" class=\"button\">{{model.text}}</a>\r\n\r\n"
 
 /***/ }
 ]);
