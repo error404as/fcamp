@@ -227,6 +227,21 @@ webpackJsonp([0],[
 						}
 					}
 				};
+
+				model.imageUpload = function (input) {
+					console.log(input.files[0]);
+					if (!input.value) {
+						return;
+					}
+
+					var form = new FormData();
+					form.append('image', input.files[0]);
+
+					fetcher.uploadImage(form).then(function (data) {
+						model.post.image = '/uploads/' + data;
+						input.value = '';
+					});
+				};
 			}],
 			controllerAs: 'model'
 		};
@@ -236,7 +251,7 @@ webpackJsonp([0],[
 /* 10 */
 /***/ function(module, exports) {
 
-	module.exports = "<form action=\"/add\" method=\"post\" id=\"add_post\" name=\"add_post\" ng-submit=\"model.formCheck($event, add_post)\" novalidate>\r\n\t<div class=\"main\">\r\n\t\t<div class=\"content\">\r\n\t\t\t<h2>{{model.editing ? 'Edit post' : 'Add new post'}}</h2>\r\n\t\t\t<div class=\"form-item\">\r\n\t\t\t\t<label for=\"post_headline\">Title</label>\r\n\t\t\t\t<input type=\"text\" class=\"form-text\" name=\"headline\" id=\"post_headline\" autocomplete=\"off\"\r\n\t\t\t\t\tng-model=\"model.post.headline\"\r\n\t\t\t\t\tng-required=\"true\"\r\n\t\t\t\t\tng-class=\"{error: add_post.headline.$dirty && !add_post.headline.$valid}\"\r\n\t\t\t\t\t/>\r\n\t\t\t\t<div class=\"error-msg\" ng-show=\"add_post.headline.$dirty && add_post.headline.$error.required\">This field can't be empty</div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"form-item\">\r\n\t\t\t\t<label for=\"post_body\">Content</label>\r\n\t\t\t\t<textarea name=\"body\" id=\"post_body\" cols=\"30\" rows=\"10\"\r\n\t\t\t\t\tng-model=\"model.post.body\"\r\n\t\t\t\t\tcheck-minlen\r\n\t\t\t\t\tng-required=\"true\"\r\n\t\t\t\t\tng-class=\"{error: add_post.body.$dirty && !add_post.body.$valid}\"\r\n\t\t\t\t\t></textarea>\r\n\t\t\t\t<div class=\"error-msg\" ng-show=\"add_post.body.$dirty && add_post.body.$error.required\">This field can't be empty</div>\r\n\t\t\t\t<div class=\"error-msg\" ng-show=\"add_post.body.$dirty && !add_post.body.$error.required && add_post.body.$error.milen\">Article requires some more text...</div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"form-item\">\r\n\t\t\t\t<label for=\"post_tags\">Tags</label>\r\n\t\t\t\t<input type=\"text\" class=\"form-text\" name=\"tags\" id=\"post_tags\" ng-model=\"model.post.tags\">\r\n\t\t\t\t<div class=\"sub\">Comma separated tags. Eg: sport, dev, my trip, web</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t<aside class=\"sidebar\">\r\n\t\t\t<div class=\"form-item\">\r\n\t\t\t\t<label for=\"post_permalink\">URL</label>\r\n\t\t\t\t<input type=\"text\" class=\"form-text\" name=\"permalink\" id=\"post_permalink\" ng-model=\"model.post.permalink\" ng-change=\"model.formatUrl()\" autocomplete=\"off\" ng-disabled=\"model.editing\">\r\n\t\t\t\t<div class=\"sub\" id=\"post_permalink_preview\">{{model.permalinkView}}</div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"form-item\">\r\n\t\t\t\t<label for=\"post_date\">Date</label>\r\n\t\t\t\t<input type=\"text\" class=\"form-text\" id=\"post_date\" placeholder=\"YYYY-MM-DD HH:MM\" ng-model=\"model.createdView\" ng-change=\"model.formatDate()\" autocomplete=\"off\">\r\n\t\t\t\t<input type=\"hidden\" name=\"created\" id=\"post_date_utc\" ng-model=\"model.post.created\">\r\n\t\t\t</div>\r\n\t\t\t<div class=\"form-item\">\r\n\t\t\t\t<label for=\"post_image\">Cover image URL</label>\r\n\t\t\t\t<input type=\"text\" name=\"image\" id=\"post_image\" class=\"form-text\" ng-model=\"model.post.image\">\r\n\t\t\t</div>\r\n\t\t</aside>\r\n\t</div>\r\n\t<div class=\"foot-content\">\r\n\t\t<div class=\"form-action\">\r\n\t\t\t<button type=\"submit\" class=\"button\">{{model.editing ? 'Save updates' : 'Publish'}}</button>\r\n\t\t</div>\r\n\t</div>\r\n</form>\r\n"
+	module.exports = "<form action=\"/add\" method=\"post\" id=\"add_post\" name=\"add_post\" ng-submit=\"model.formCheck($event, add_post)\" novalidate>\r\n\t<div class=\"main\">\r\n\t\t<div class=\"content\">\r\n\t\t\t<h2>{{model.editing ? 'Edit post' : 'Add new post'}}</h2>\r\n\t\t\t<div class=\"form-item\">\r\n\t\t\t\t<label for=\"post_headline\">Title</label>\r\n\t\t\t\t<input type=\"text\" class=\"form-text\" name=\"headline\" id=\"post_headline\" autocomplete=\"off\"\r\n\t\t\t\t\tng-model=\"model.post.headline\"\r\n\t\t\t\t\tng-required=\"true\"\r\n\t\t\t\t\tng-class=\"{error: add_post.headline.$dirty && !add_post.headline.$valid}\"\r\n\t\t\t\t\t/>\r\n\t\t\t\t<div class=\"error-msg\" ng-show=\"add_post.headline.$dirty && add_post.headline.$error.required\">This field can't be empty</div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"form-item\">\r\n\t\t\t\t<label for=\"post_body\">Content</label>\r\n\t\t\t\t<textarea name=\"body\" id=\"post_body\" cols=\"30\" rows=\"10\"\r\n\t\t\t\t\tng-model=\"model.post.body\"\r\n\t\t\t\t\tcheck-minlen\r\n\t\t\t\t\tng-required=\"true\"\r\n\t\t\t\t\tng-class=\"{error: add_post.body.$dirty && !add_post.body.$valid}\"\r\n\t\t\t\t\t></textarea>\r\n\t\t\t\t<div class=\"error-msg\" ng-show=\"add_post.body.$dirty && add_post.body.$error.required\">This field can't be empty</div>\r\n\t\t\t\t<div class=\"error-msg\" ng-show=\"add_post.body.$dirty && !add_post.body.$error.required && add_post.body.$error.milen\">Article requires some more text...</div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"form-item\">\r\n\t\t\t\t<label for=\"post_tags\">Tags</label>\r\n\t\t\t\t<input type=\"text\" class=\"form-text\" name=\"tags\" id=\"post_tags\" ng-model=\"model.post.tags\">\r\n\t\t\t\t<div class=\"sub\">Comma separated tags. Eg: sport, dev, my trip, web</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t<aside class=\"sidebar\">\r\n\t\t\t<div class=\"form-item\">\r\n\t\t\t\t<label for=\"post_permalink\">URL</label>\r\n\t\t\t\t<input type=\"text\" class=\"form-text\" name=\"permalink\" id=\"post_permalink\" ng-model=\"model.post.permalink\" ng-change=\"model.formatUrl()\" autocomplete=\"off\" ng-disabled=\"model.editing\">\r\n\t\t\t\t<div class=\"sub\" id=\"post_permalink_preview\">{{model.permalinkView}}</div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"form-item\">\r\n\t\t\t\t<label for=\"post_date\">Date</label>\r\n\t\t\t\t<input type=\"text\" class=\"form-text\" id=\"post_date\" placeholder=\"YYYY-MM-DD HH:MM\" ng-model=\"model.createdView\" ng-change=\"model.formatDate()\" autocomplete=\"off\">\r\n\t\t\t\t<input type=\"hidden\" name=\"created\" id=\"post_date_utc\" ng-model=\"model.post.created\">\r\n\t\t\t</div>\r\n\t\t\t<div class=\"form-item\">\r\n\t\t\t\t<label for=\"post_image\">Cover image URL</label>\r\n\t\t\t\t<input type=\"text\" name=\"image\" id=\"post_image\" class=\"form-text\" ng-model=\"model.post.image\">\r\n\t\t\t</div>\r\n\t\t\t<div class=\"form-item\">\r\n\t\t\t\t<label for=\"post_image\">Upload image</label>\r\n\t\t\t\t<input type=\"file\" class=\"form-text\" onchange=\"angular.element(this).scope().model.imageUpload(this)\">\r\n\t\t\t</div>\r\n\t\t</aside>\r\n\t</div>\r\n\t<div class=\"foot-content\">\r\n\t\t<div class=\"form-action\">\r\n\t\t\t<button type=\"submit\" class=\"button\">{{model.editing ? 'Save updates' : 'Publish'}}</button>\r\n\t\t</div>\r\n\t</div>\r\n</form>\r\n"
 
 /***/ },
 /* 11 */
@@ -308,7 +323,8 @@ webpackJsonp([0],[
 			delPost: deletePost,
 			getNews: getNews,
 			addNewsItem: addNewsItem,
-			checkExists: checkExists
+			checkExists: checkExists,
+			uploadImage: uploadImage
 		};
 
 		function getPosts(page) {
@@ -341,6 +357,11 @@ webpackJsonp([0],[
 		}
 		function checkExists(urls) {
 			return $http.post('/check-exists', urls).then(function (resp) {
+				return resp.data;
+			});
+		}
+		function uploadImage(file) {
+			return $http.post('/upload', file, { headers: { 'Content-Type': undefined } }).then(function (resp) {
 				return resp.data;
 			});
 		}

@@ -15,7 +15,8 @@ function fetcher($http){
         delPost: deletePost,
         getNews: getNews,
         addNewsItem: addNewsItem,
-        checkExists: checkExists
+        checkExists: checkExists,
+        uploadImage: uploadImage
     };
 
 	function getPosts(page){
@@ -38,6 +39,9 @@ function fetcher($http){
 	}
 	function checkExists(urls){
 		return $http.post('/check-exists', urls).then(resp => resp.data);
+	}
+	function uploadImage(file){
+		return $http.post('/upload', file, { headers: {'Content-Type': undefined} }).then(resp => resp.data);
 	}
 }
 

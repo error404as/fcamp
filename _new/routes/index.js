@@ -5,6 +5,7 @@ var path = require('path');
 var fs = require('fs');
 var moment = require('moment');
 var passport = require('passport');  
+var formidable = require('formidable');  
 
 
 var formi = require('formidable');
@@ -78,6 +79,17 @@ router.post('/check-exists', function(req, res, next) {
 	ctrl.checkBySource(req.body, function(db){
 		res.send(db);
 	});   
+});
+
+router.post('/upload', isLoggedIn, function(req, res, next) {
+    var form = new formidable.IncomingForm();
+    form.uploadDir = path.join(__dirname, '../public/uploads');
+    form.keepExtensions = true;
+
+    form.parse(req, function(err, fields, files) {
+        res.send(path.basename(files.image.path));
+    });
+
 });
 
 router.get('/login', isLoggedOut, function(req, res, next) {  

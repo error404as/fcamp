@@ -85,6 +85,20 @@ export const PostAddDirective =  function(){
 				}
 			}
 
+			model.imageUpload = function(input){
+				console.log(input.files[0]);
+				if(!input.value){ return }
+
+				var form = new FormData();
+				form.append('image', input.files[0]);
+
+				fetcher.uploadImage(form).then(function(data){
+					model.post.image = '/uploads/' + data;
+					input.value = '';
+				});
+
+			}
+
 		},
 		controllerAs: 'model'
 	}

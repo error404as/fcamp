@@ -43,6 +43,10 @@
 				<label for="post_image">Cover image URL</label>
 				<input type="text" name="image" id="post_image" class="form-text" ng-model="model.post.image">
 			</div>
+			<div class="form-item">
+				<label for="post_image">Upload image</label>
+				<input type="file" class="form-text" onchange="angular.element(this).scope().model.imageUpload(this)">
+			</div>
 		</aside>
 	</div>
 	<div class="foot-content">
